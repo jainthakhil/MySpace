@@ -27,9 +27,11 @@ const Home = () => {
         alert("upload Successfull");
       })
   };
-
+  
+  const storedUser = JSON.parse(localStorage.getItem('myspace-user'));
+  const username = storedUser.displayName;
   useEffect(() => {
-    if (!firebase.isLoggedIn) {
+    if (!storedUser) {
       console.log("user is not logged in", firebase.isLoggedIn)
       navigate('/signin')
       return
@@ -61,7 +63,7 @@ const Home = () => {
           >
             Logout
           </button>
-      <h1 className='text-5xl m-10'>Hello</h1>
+      <h1 className='text-5xl m-10'>Hello, {username}</h1>
       <p className='text-2xl m-5'>Welcome to MySpace</p>
 
       <div className="cont w-full h-auto flex">

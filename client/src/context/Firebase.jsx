@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { initializeApp } from 'firebase/app'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from 'firebase/auth'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile } from 'firebase/auth'
 import { getDatabase, ref, set  } from 'firebase/database';
 import {getFirestore, collection, addDoc, doc, getDoc, getDocs, query, where} from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
@@ -36,15 +36,29 @@ export const FirebaseProvider = (props) => {
 
     useEffect(()=>{
         onAuthStateChanged(firebaseAuth, user => {
-            console.log("loggedIn user",user);
-            if(user) setLoggedInUser(user);
+            localStorage.setItem('myspace-user', JSON.stringify(user)); // Save user
+            console.log("loggedIn user",user);   
+            if (user) {
+                setLoggedInUser(user)
+              }
             else setLoggedInUser(null)
         })
     }, [])
     
-    const signupUser = (email, password) => {
-       return createUserWithEmailAndPassword(firebaseAuth, email, password)
-    };
+    const signupUser = async (email, password, username) => {
+        try {
+          const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+      
+          // 🧠 Set displayName after user is created
+         await updateProfile(userCredential.user, {
+            displayName: username
+          });
+          console.log("User signed up & profile updated:", userCredential.user);
+          return userCredential.user
+        } catch (error) {
+          console.error("Signup error:", error.message);
+        }
+      };
 
     const signInWithGoogle = () => {
         return signInWithPopup(firebaseAuth, googleProvider);
@@ -55,12 +69,14 @@ export const FirebaseProvider = (props) => {
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log(user);
-                setIsUserLoggedIn(user);                
+                setLoggedInUser(user);
+                console.log(user.displayName)
+                           
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(errorMessage);
+                console.log(error);
             });
     }
     // useEffect(() => {
@@ -81,9 +97,13 @@ export const FirebaseProvider = (props) => {
 
     const isLoggedIn = loggedInUser ? true : false;
 
-    const logOut = () => {
-        return signOut(firebaseAuth);
-    }
+    // const logOut = () => {
+    //     return signOut(firebaseAuth);
+    // }
+    const logOut = async () => {
+        await signOut(firebaseAuth);
+        localStorage.removeItem('myspace-user');
+      };
 
     const putData = (key, data) => set(ref(database, key), data);
 
@@ -120,7 +140,7 @@ export const FirebaseProvider = (props) => {
         snap.forEach((data)=> console.log(data.data()));
     }
 
-    return <FirebaseContext.Provider value={{ signupUser,signInWithGoogle, signinUser, putData, isLoggedIn, logOut, writeUserData, makeUserSubcollection,getDocument, getDocumentByQuery}}>
+    return <FirebaseContext.Provider value={{ signupUser,signInWithGoogle, signinUser, putData, isLoggedIn, loggedInUser, logOut, writeUserData, makeUserSubcollection,getDocument, getDocumentByQuery}}>
         {props.children}
     </FirebaseContext.Provider>
 }

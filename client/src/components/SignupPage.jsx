@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFirebase } from '../context/Firebase.jsx';
 import { useNavigate } from 'react-router-dom';
 
@@ -31,7 +31,8 @@ const SignUpPage = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await firebase.signupUser(formData.email, formData.password); 
+    console.log(formData)
+    const result = await firebase.signupUser(formData.email, formData.password, formData.username); 
 
     // firebase.writeUserData(formData)
 
