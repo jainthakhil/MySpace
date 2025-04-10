@@ -53,7 +53,7 @@ export const FirebaseProvider = (props) => {
          await updateProfile(userCredential.user, {
             displayName: username
           });
-          console.log("User signed up & profile updated:", userCredential.user);
+          console.log("User signed up & profile updated:");
           return userCredential.user
         } catch (error) {
           console.error("Signup error:", error.message);
@@ -68,10 +68,7 @@ export const FirebaseProvider = (props) => {
         return signInWithEmailAndPassword(firebaseAuth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
-                console.log(user);
-                setLoggedInUser(user);
-                console.log(user.displayName)
-                           
+                setLoggedInUser(user);                 
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -140,7 +137,7 @@ export const FirebaseProvider = (props) => {
         snap.forEach((data)=> console.log(data.data()));
     }
 
-    return <FirebaseContext.Provider value={{ signupUser,signInWithGoogle, signinUser, putData, isLoggedIn, loggedInUser, logOut, writeUserData, makeUserSubcollection,getDocument, getDocumentByQuery}}>
+    return <FirebaseContext.Provider value={{firebaseApp, signupUser,signInWithGoogle, signinUser, putData, isLoggedIn, loggedInUser, logOut, writeUserData, makeUserSubcollection,getDocument, getDocumentByQuery}}>
         {props.children}
     </FirebaseContext.Provider>
 }

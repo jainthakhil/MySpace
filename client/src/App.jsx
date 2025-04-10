@@ -6,6 +6,8 @@ import SignInPage from './components/SigninPage.jsx'
 import { useFirebase } from './context/Firebase.jsx';
 import Home from './components/Home.jsx';
 import UploadPage from './components/UploadPage.jsx';
+import DocumentsPage from './components/DocumentsPage.jsx';
+import MediaPage from './components/MediaPage.jsx';
 
 
 function App() {
@@ -13,10 +15,10 @@ function App() {
 
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(null);
 
-  // useEffect(() => {
-  //   setIsUserLoggedIn(firebase.isUserLoggedIn || null);
+  useEffect(() => {
+    setIsUserLoggedIn(firebase.isUserLoggedIn || null);
 
-  // }, [firebase.isUserLoggedIn]);
+  }, [firebase.isUserLoggedIn]);
 
   // useEffect(() => {
   //   // Redirect logic when login state changes
@@ -39,6 +41,8 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="*" element={<SignInPage />} />
         <Route path="/upload" element={<UploadPage />} />
+        <Route path="/documents" element={<DocumentsPage />} />
+        <Route path="/media" element={<MediaPage />} />
       </Routes>
     </div>
 
