@@ -39,6 +39,7 @@ const DataItemBox = ({ folderPath, file, getFileIcon, index }) => {
 
     const handleDelete = async ()=>{
         await firebase.deleteItem( folderPath, `${folderPath}${file.name}`);
+        setShowMenu(false);
 
     }
     // handleDelete = firebase.deleteItem(`media/${file.name}`)
@@ -50,6 +51,7 @@ const DataItemBox = ({ folderPath, file, getFileIcon, index }) => {
       link.href = file.url;
       link.download = file.name;
       link.click();
+      setShowMenu(false);
     };
 
     // console.log(file)
@@ -66,16 +68,16 @@ const DataItemBox = ({ folderPath, file, getFileIcon, index }) => {
           </button>
   
           {showMenu && (
-            <div className="absolute right-0 mt-2 w-32 bg-white rounded shadow-lg z-10">
+            <div className="absolute right-0 mt-2 w-32 bg-white rounded shadow-lg z-10 ">
               <button
                 onClick={handleDownload}
-                className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 w-full text-sm text-blue-500"
+                className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 w-full text-sm text-blue-500 cursor-pointer"
               >
                 <FiDownload /> Download
               </button>
               <button
                 onClick={handleDelete}
-                className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 w-full text-sm text-orange-500"
+                className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 w-full text-sm text-orange-500 cursor-pointer"
               >
                 <FiTrash2 /> Delete
               </button>

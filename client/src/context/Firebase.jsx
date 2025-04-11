@@ -21,23 +21,15 @@ import cssIcon from '../assets/css.png'
 import txtIcon from '../assets/txt.png'
 import defaultIcon from '../assets/defaultIcon.png'
 
-const apiKey = import.meta.env.VITE_API_KEY
-const authDomain = import.meta.env.VITE_AUTH_DOMAIN
-const projectId = import.meta.env.VITE_PROJECT_ID
-const storageBucket = import.meta.env.VITE_STORAGE_BUCKET
-const messagingSenderId = import.meta.env.VITE_MESSAGING_SENDER_ID
-const appId = import.meta.env.VITE_APP_ID
-const databaseURL = import.meta.env.VITE_DATABASE_URL
 
 const firebaseConfig = {
-
-     apiKey: apiKey,
-    authDomain: authDomain,
-    projectId: projectId,
-    storageBucket:storageBucket ,
-    messagingSenderId: messagingSenderId,
-    appId: appId,
-    databaseURL: databaseURL
+    apiKey: import.meta.env.VITE_API_KEY,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    storageBucket:import.meta.env.VITE_STORAGE_BUCKET ,
+    messagingSenderId: import.meta.VITE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_APP_ID,
+    databaseURL: import.meta.env.VITE_DATABASE_URL
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -63,6 +55,7 @@ export const FirebaseProvider = (props) => {
     const [uploadedUrl, setUploadedUrl] = useState(null);
     const [progress, setProgress] = useState(0);
     const [stateToggle, setStateToggle] = useState(false);
+    console.log(firebaseConfig)
 
     useEffect(()=>{
         onAuthStateChanged(firebaseAuth, user => {
@@ -195,7 +188,6 @@ export const FirebaseProvider = (props) => {
         const folderRef = storageRef(storage, folderPath || 'documents/')
             try {
                 const res = await listAll(folderRef);
-    
                 const filesWithMeta = await Promise.all(
                     res.items.map(async (item) => {
                         try {
@@ -297,7 +289,7 @@ export const FirebaseProvider = (props) => {
             try {
               const dataItemRef = storageRef(storage, itemPath);
               await deleteObject(dataItemRef);
-              setStateToggle(...prev => !prev);
+              setStateToggle(prev => !prev);
               console.log("Item deleted successfully");
               fetchFiles(folderPath); // ✅ Trigger UI update
             } catch (error) {

@@ -90,7 +90,7 @@ const DropzoneUploader = ({ path, onUploadComplete}) => {
         <div className="mt-6 text-center">
           {firebase.progress > 0 && firebase.progress < 100 && (
             <div className="text-sm text-gray-700 dark:text-green-300">
-              Upload Progress: {firebase.progress}%
+              Uploading complete {firebase.progress}%
             </div>
           )}
 
