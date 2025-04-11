@@ -3,16 +3,48 @@ import { initializeApp } from 'firebase/app'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile } from 'firebase/auth'
 import { getDatabase, ref, set  } from 'firebase/database';
 import {getFirestore, collection, addDoc, doc, getDoc, getDocs, query, where} from 'firebase/firestore'
-import { getStorage } from 'firebase/storage'
+import { getStorage, getMetadata, getDownloadURL, listAll, ref as storageRef, deleteObject, uploadBytesResumable } from 'firebase/storage'
+
+// importing file Icons 
+import googleDocsIcon from '../assets/docx.png'
+import sheetsIcon from '../assets/xlsx.png'
+import pdfIcon from '../assets/ppdf.png'
+import pptIcon from '../assets/pptx.png'
+
+import mp3Icon from '../assets/mp3.png'
+import mp4Icon from '../assets/mp4.png'
+import zipIcon from '../assets/zip.png'
+import pngIcon from '../assets/png.png'
+import imageIcon from '../assets/jpg.png'
+import htmlIcon from '../assets/html.png'
+import cssIcon from '../assets/css.png'
+import txtIcon from '../assets/txt.png'
+import defaultIcon from '../assets/defaultIcon.png'
+
+const apiKey = import.meta.env.VITE_API_KEY
+const authDomain = import.meta.env.VITE_AUTH_DOMAIN
+const projectId = import.meta.env.VITE_PROJECT_ID
+const storageBucket = import.meta.env.VITE_STORAGE_BUCKET
+const messagingSenderId = import.meta.env.VITE_MESSAGING_SENDER_ID
+const appId = import.meta.env.VITE_APP_ID
+const databaseURL = import.meta.env.VITE_DATABASE_URL
 
 const firebaseConfig = {
-    apiKey: "AIzaSyABnpU4cEvnqRZea2gqS7dgNvVS8zPmc7k",
-    authDomain: "myspace-app-b9054.firebaseapp.com",
-    projectId: "myspace-app-b9054",
-    storageBucket: "myspace-app-b9054.firebasestorage.app",
-    messagingSenderId: "220887697383",
-    appId: "1:220887697383:web:3b401122a04931dabe1f42",
-    databaseURL: "https://myspace-app-b9054-default-rtdb.firebaseio.com"
+    // apiKey: "AIzaSyABnpU4cEvnqRZea2gqS7dgNvVS8zPmc7k",
+    // authDomain: "myspace-app-b9054.firebaseapp.com",
+    // projectId: "myspace-app-b9054",
+    // storageBucket: "myspace-app-b9054.firebasestorage.app",
+    // messagingSenderId: "220887697383",
+    // appId: "1:220887697383:web:3b401122a04931dabe1f42",
+    // databaseURL: "https://myspace-app-b9054-default-rtdb.firebaseio.com"
+
+     apiKey: apiKey,
+    authDomain: authDomain,
+    projectId: projectId,
+    storageBucket:storageBucket ,
+    messagingSenderId: messagingSenderId,
+    appId: appId,
+    databaseURL: databaseURL
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -31,8 +63,13 @@ const googleProvider = new GoogleAuthProvider()
 const FirebaseContext = createContext(null);
 export const useFirebase = () => useContext(FirebaseContext);
 
+ 
+
 export const FirebaseProvider = (props) => {
     const [loggedInUser, setLoggedInUser] = useState(null);
+    const [uploadedUrl, setUploadedUrl] = useState(null);
+    const [progress, setProgress] = useState(0);
+    const [stateToggle, setStateToggle] = useState(false);
 
     useEffect(()=>{
         onAuthStateChanged(firebaseAuth, user => {
@@ -102,7 +139,7 @@ export const FirebaseProvider = (props) => {
         localStorage.removeItem('myspace-user');
       };
 
-    const putData = (key, data) => set(ref(database, key), data);
+    // const putData = (key, data) => set(ref(database, key), data);
 
     // adding data to firestore
     const writeUserData = async(userData) => {
@@ -137,7 +174,145 @@ export const FirebaseProvider = (props) => {
         snap.forEach((data)=> console.log(data.data()));
     }
 
-    return <FirebaseContext.Provider value={{firebaseApp, signupUser,signInWithGoogle, signinUser, putData, isLoggedIn, loggedInUser, logOut, writeUserData, makeUserSubcollection,getDocument, getDocumentByQuery}}>
+    const uploadFile = (file, path) => {
+        const dataRef = storageRef(storage, `${path}/${file.name}`);
+        
+            const uploadTask = uploadBytesResumable(dataRef, file);
+        
+            uploadTask.on(
+              'state_changed',
+              (snapshot) => {
+                const percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                setProgress(Math.round(percent));
+              },
+              (error) => {
+                console.error('Upload error:', error);
+              },
+              () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                  setUploadedUrl(downloadURL);
+                  fetchFiles(path)
+                //   if (onUploadComplete) onUploadComplete();
+                });
+              }
+            );
+    }
+
+    const fetchFiles = async (folderPath) => {
+        const folderRef = storageRef(storage, folderPath || 'documents/')
+            try {
+                const res = await listAll(folderRef);
+    
+                const filesWithMeta = await Promise.all(
+                    res.items.map(async (item) => {
+                        try {
+                            const [url, metadata] = await Promise.all([
+                                getDownloadURL(item),
+                                getMetadata(item),
+                            ]);
+                            // console.log(metadata)
+    
+                            return {
+                                url,
+                                contentType: metadata.contentType,
+                                name: item.name,
+                            };
+                        } catch (err) {
+                            console.error(`Error fetching metadata for ${item.name}:`, err);
+                            return null;
+                        }
+                    })
+                );
+                return filesWithMeta.filter(Boolean);
+            } catch (error) {
+                console.error('Error fetching documents:', error);
+                return [];
+            }
+            console.log()
+        };
+
+        //extra
+
+        const getFileIcon = (contentType, name) => {
+            const lowerName = name.toLowerCase();
+        
+            if (contentType.includes('pdf') || lowerName.includes('.pdf')) {
+                return pdfIcon;
+            } else if (
+                contentType.includes('presentation') ||
+                lowerName.includes('.ppt') ||
+                lowerName.includes('.pptx')
+            ) {
+                return pptIcon;
+            } else if (
+                contentType.includes('spreadsheet') ||
+                contentType.includes('excel') ||
+                lowerName.includes('.xls') ||
+                lowerName.includes('.xlsx')
+            ) {
+                return sheetsIcon;
+            } else if (
+                contentType.includes('word') ||
+                contentType.includes('document') ||
+                lowerName.includes('.doc') ||
+                lowerName.includes('.docx')
+            ) {
+                return googleDocsIcon;
+            } else if(
+                contentType.includes('text') ||
+                lowerName.includes('.txt')
+            ) {
+                return txtIcon;
+            } else if (
+                contentType.includes('video') ||
+                lowerName.includes('.mp4')
+            ) {
+                return mp4Icon;
+            } else if (
+                contentType.includes('audio') ||
+                lowerName.includes('.mp3')
+            ) {
+                return mp3Icon;
+            } else if (
+                contentType.includes('zip') ||
+                lowerName.includes('.zip')
+            ) {
+                return zipIcon;
+            } else if (
+                lowerName.includes('.png')
+            ) {
+                return pngIcon;
+            } else if (
+                lowerName.includes('.jpeg') ||
+                lowerName.includes('.jpg')
+            ) {
+                return imageIcon; // you can name this jpgIcon if you prefer
+            } else if (
+                lowerName.includes('.html')
+            ) {
+                return htmlIcon;
+            } else if (
+                lowerName.includes('.css')
+            ) {
+                return cssIcon;
+            } else {
+                return defaultIcon; // fallback icon
+            }
+        };
+
+        const deleteItem = async (folderPath, itemPath) => {
+            try {
+              const dataItemRef = storageRef(storage, itemPath);
+              await deleteObject(dataItemRef);
+              setStateToggle(...prev => !prev);
+              console.log("Item deleted successfully");
+              fetchFiles(folderPath); // ✅ Trigger UI update
+            } catch (error) {
+              console.error("Failed to delete item:", error);
+            }
+          };
+
+    return <FirebaseContext.Provider value={{firebaseApp, firestore, signupUser,signInWithGoogle, signinUser,  isLoggedIn, loggedInUser, logOut, writeUserData, makeUserSubcollection,getDocument, getDocumentByQuery ,uploadFile, fetchFiles, getFileIcon, deleteItem, uploadedUrl, setUploadedUrl, progress ,stateToggle}}>
         {props.children}
     </FirebaseContext.Provider>
 }

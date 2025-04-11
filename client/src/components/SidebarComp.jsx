@@ -18,7 +18,7 @@ const SidebarComp = () => {
     return (
         <div className="relative bg-white dark:bg-gray-900">
             <div className="flex flex-col sm:flex-row sm:justify-around">
-                <div className="h-screen w-72">
+                <div className="h-screen w-62 lg:w-72">
                     <div className="flex items-center justify-start mx-6 mt-10">
                         <img className="h-10" src={logoImg} />
                         <span className="text-gray-600 dark:text-gray-300 ml-4 text-2xl font-bold">
@@ -58,7 +58,7 @@ const SidebarComp = () => {
 
                     <div className="absolute bottom-0 my-10">
                         <button
-                            className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors duration-200 flex items-center py-2 px-8"
+                            className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors duration-200 flex items-center py-2 px-8 cursor-pointer"
                             onClick={handleLogout}
                         >
                             <img src={logoutImg} alt="Logout" className="h-[24px]" />

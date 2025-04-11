@@ -5,7 +5,7 @@ import SignUpPage from './components/SignupPage.jsx'
 import SignInPage from './components/SigninPage.jsx'
 import { useFirebase } from './context/Firebase.jsx';
 import Home from './components/Home.jsx';
-import UploadPage from './components/UploadPage.jsx';
+// import UploadPage from './components/UploadPage.jsx';
 import DocumentsPage from './components/DocumentsPage.jsx';
 import MediaPage from './components/MediaPage.jsx';
 
@@ -40,7 +40,7 @@ function App() {
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="*" element={<SignInPage />} />
-        <Route path="/upload" element={<UploadPage />} />
+        {/* <Route path="/upload" element={<UploadPage />} /> */}
         <Route path="/documents" element={<DocumentsPage />} />
         <Route path="/media" element={<MediaPage />} />
       </Routes>

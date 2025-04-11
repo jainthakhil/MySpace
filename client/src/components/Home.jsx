@@ -30,31 +30,48 @@ const Home = () => {
         alert("upload Successfull");
       })
   };
+  const folderData = firebase.fetchFiles('documents');
 
   const storedUser = JSON.parse(localStorage.getItem('myspace-user'));
   const username = storedUser.displayName;
+
   useEffect(() => {
+    
     if (!storedUser) {
       console.log("user is not logged in", firebase.isLoggedIn)
       navigate('/signin')
       return
     }
-    listAll(uploadListRef).then(async (res) => {
-      const urls = await Promise.all(
-        res.items.map((item) => getDownloadURL(item))
-      );
-      setDataList(urls); // 🔥 Replace instead of appending
-    });
+    const loadFiles = async () => {
+      const data = await firebase.fetchFiles('documents/');
+      setDataList(data);
+    };
+
+    loadFiles();
+    console.log("data list is : ",dataList)
+
+    // listAll(uploadListRef).then(async (res) => {
+    //   const urls = await Promise.all(
+    //     res.items.map((item) => getDownloadURL(item))
+    //   );
+    //   setDataList(urls); // 🔥 Replace instead of appending
+    // });
 
 
   }, [firebase, navigate])
+
+  // if(folderData){
+  //   console.log("folder data : ", folderData)
+
+  // }
 
   const handleLogout = async () => {
     await firebase.logOut();
     localStorage.clear();
     navigate('/signin')
   }
-  console.log(firebase.isLoggedIn)
+  // console.log(firebase.isLoggedIn)
+
   return (
     <div className="parent-cont w-full min-h-screen flex bg-gray-700">
     <SidebarComp/>
@@ -103,7 +120,23 @@ const Home = () => {
             </button>
           </div>
         </div>
-        <DocViewerPage url={"https://firebasestorage.googleapis.com/v0/b/myspace-app-b9054.firebasestorage.app/o/documents%2FAKHIL%20JAINTH%20RESUME.docx?alt=media&token=c2ba5cd5-72ea-4572-97aa-20306da2a93f"} />
+        <ul className="space-y-2">
+        {dataList.map((file, idx) => (
+          <li key={idx} className="border p-2 rounded bg-gray-100">
+            <p><strong>Name:</strong> {file.name}</p>
+            <p><strong>Type:</strong> {file.contentType}</p>
+            <a
+              href={file.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
+              View File
+            </a>
+          </li>
+        ))}
+      </ul>
+        
       </div>
     </div>
   )
