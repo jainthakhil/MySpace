@@ -1,56 +1,34 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useFirebase } from '../context/Firebase.jsx';
-import SidebarComp from './SidebarComp.jsx';
+import SuccessCard from './SucessMessage.jsx';
+
 
 const DropzoneUploader = ({ path, onUploadComplete}) => {
   const [progress, setProgress] = useState(0);
-  // const [uploadedUrl, setUploadedUrl] = useState(null);
   const firebase = useFirebase();
   const firebaseApp = firebase.firebaseApp;
   const uploadedUrl = firebase.uploadedUrl
+
+
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
     if (!file) return;
 
-    firebase.uploadFile(file, path);
-
-    
-
-    // const storage = getStorage(firebaseApp);
-    // const dataRef = ref(storage, `${path}/${file.name}`);
-
-    // const uploadTask = uploadBytesResumable(dataRef, file);
-
-    // uploadTask.on(
-    //   'state_changed',
-    //   (snapshot) => {
-    //     const percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //     setProgress(Math.round(percent));
-    //   },
-    //   (error) => {
-    //     console.error('Upload error:', error);
-    //   },
-    //   () => {
-    //     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    //       setUploadedUrl(downloadURL);
-    //       if (onUploadComplete) onUploadComplete();
-    //     });
-    //   }
-    // );
-
-  }, []);
+    firebase.uploadFile(file, path, () => {
+      if (onUploadComplete) onUploadComplete(); // fire the prop callback
+    });
+  }, [[firebase, path, onUploadComplete]]);
 
   useEffect(() => {
     let timer;
     if (uploadedUrl) {
       timer = setTimeout(() => {
         firebase.setUploadedUrl('');
-      }, 2000);
+      }, 4000);
     }
     return () => clearTimeout(timer);
-  }, [uploadedUrl]);
+  }, [uploadedUrl, ]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -59,7 +37,7 @@ const DropzoneUploader = ({ path, onUploadComplete}) => {
       <div className="flex flex-col flex-grow items-center justify-center p-10">
         <div
           {...getRootProps()}
-          className="flex flex-col items-center justify-center w-full min-w-100 h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-white dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition"
+          className="flex flex-col items-center justify-center w-full min-w-50 h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-white dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition"
         >
           <input {...getInputProps()} />
           <div className="flex flex-col items-center justify-center pt-5 pb-6 ">
@@ -95,17 +73,11 @@ const DropzoneUploader = ({ path, onUploadComplete}) => {
           )}
 
           {uploadedUrl && (
-            <div className="mt-4">
+            <SuccessCard/>
+            /* <div className="mt-4">
               <p className="text-green-600 dark:text-green-400 text-sm">Uploaded Successfully!</p>
-              {/* <a
-                href={uploadedUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="text-blue-600 dark:text-blue-400 underline"
-              >
-                View File
-              </a> */}
-            </div>
+             
+            </div> */
           )}
         </div>
       </div>

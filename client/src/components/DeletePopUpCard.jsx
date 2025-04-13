@@ -1,0 +1,111 @@
+import React, { useEffect } from 'react';
+import { useFirebase } from '../context/Firebase';
+import { usePopUpContext } from '../context/PopUpContext';
+
+const DeleteCard = ({ file, folderPath, onDeleteToast, localStorageName }) => {
+
+  const firebase = useFirebase();
+  const popupContext = usePopUpContext();
+
+
+  const handleConfirmDelete = async () => {
+    await firebase.deleteItem(folderPath, `${folderPath}${file.name}`, localStorageName);
+    popupContext.setShowDeleteCard(false);
+    
+  };
+
+  // const handleDelete = async ()=>{
+  //     await firebase.deleteItem( folderPath, `${folderPath}${file.name}`, localStorageName);
+  //     onToggleMenu();
+  //     if (onDeleteToast) onDeleteToast(); // 👈 trigger toast
+  // }
+
+  
+
+
+
+  // useEffect(() => {
+  //   let timer;
+  //   if (popupContext.deleteLoader) {
+  //     timer = setTimeout(() => {
+  //       popupContext.setDeleteLoader(false);
+  //     }, 6000);
+  //   }
+  //   return () => clearTimeout(timer);
+  // }, [popupContext.deleteLoader]);
+
+
+  useEffect(() => {
+    console.log("file in delete card: ", file.name)
+    console.log(popupContext)
+
+  }, [file, popupContext.showDeleteCard])
+
+  return (
+    <div className="group select-none min-w-[250px] flex flex-col p-4 relative items-center justify-center bg-gray-800 border border-gray-800 shadow-lg rounded-2xl">
+      <div>
+        <div className="text-center p-3 flex-auto justify-center">
+          <svg fill="currentColor" viewBox="0 0 20 20" className="group-hover:animate-bounce w-12 h-12 flex items-center text-gray-600 fill-red-500 mx-auto" xmlns="http://www.w3.org/2000/svg">
+            <path clipRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" fillRule="evenodd" />
+          </svg>
+          <h2 className="text-xl font-bold py-4 text-gray-200"> Are you really want to delete <strong>{file.name}</strong> ?</h2>
+        </div>
+        <div className=" p-2 mt-2 text-center space-x-1 md:block">
+          <button onClick={() => popupContext.setShowDeleteCard(false)} className="mb-2 md:mb-0 bg-gray-700 px-5 py-2 text-sm shadow-sm font-medium tracking-wider border-2 border-gray-600 hover:border-gray-700 text-gray-300 rounded-full hover:shadow-lg hover:bg-gray-800 transition ease-in duration-300 cursor-pointer active:scale-110">
+            Cancel
+          </button>
+          <button onClick={handleConfirmDelete} className="bg-red-500 hover:bg-transparent px-5 ml-4 py-2 text-sm shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-red-500 hover:border-red-500 text-white hover:text-red-500 rounded-full transition ease-in-out duration-300 cursor-pointer active:scale-110">
+            Confirm
+          </button>
+        </div>
+      </div>
+      {/* {showCard &&
+            <div className='fixed bottom-50 right-50 z-50"'> <DeleteCard
+              file={file}
+              folderPath={folderPath}
+              onDeleteToast={onDeleteToast}
+              localStorageName={localStorageName}
+            /> </div>} */}
+    </div>
+  );
+}
+
+export default DeleteCard;
+
+
+// import React from 'react';
+// import { useFirebase } from '../context/Firebase';
+
+// const DeleteCard = ({ file, folderPath, onDeleteToast, onToggleMenu, localStorageName }) => {
+//     const firebase = useFirebase();
+
+//     const handleConfirmDelete = async () => {
+//         await firebase.deleteItem(folderPath, `${folderPath}${file.name}`, localStorageName);
+//         if (onDeleteToast) onDeleteToast();
+//     };
+
+//     return (
+//         <div className="bg-white rounded-xl shadow-lg p-6 w-[300px]">
+//             <h2 className="text-lg font-semibold mb-4 text-gray-800">Confirm Delete</h2>
+//             <p className="text-sm text-gray-600 mb-4">
+//                 Are you sure you want to delete <strong>{file.name}</strong>?
+//             </p>
+//             <div className="flex justify-end gap-4">
+//                 <button
+//                     className="px-4 py-2 text-sm rounded bg-gray-200 hover:bg-gray-300 text-black"
+//                     onClick={onToggleMenu}
+//                 >
+//                     Cancel
+//                 </button>
+//                 <button
+//                     className="px-4 py-2 text-sm rounded bg-red-500 hover:bg-red-600 text-white"
+//                     onClick={handleConfirmDelete}
+//                 >
+//                     Delete
+//                 </button>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default DeleteCard;

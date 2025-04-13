@@ -27,7 +27,7 @@ const firebaseConfig = {
     authDomain: import.meta.env.VITE_AUTH_DOMAIN,
     projectId: import.meta.env.VITE_PROJECT_ID,
     storageBucket:import.meta.env.VITE_STORAGE_BUCKET ,
-    messagingSenderId: import.meta.VITE_MESSAGING_SENDER_ID,
+    messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
     appId: import.meta.env.VITE_APP_ID,
     databaseURL: import.meta.env.VITE_DATABASE_URL
 };
@@ -54,9 +54,8 @@ export const FirebaseProvider = (props) => {
     const [loggedInUser, setLoggedInUser] = useState(null);
     const [uploadedUrl, setUploadedUrl] = useState(null);
     const [progress, setProgress] = useState(0);
-    const [stateToggle, setStateToggle] = useState(false);
-    console.log(firebaseConfig)
-
+    const [storedData, setStoredData] = useState(null);
+    
     useEffect(()=>{
         onAuthStateChanged(firebaseAuth, user => {
             localStorage.setItem('myspace-user', JSON.stringify(user)); // Save user
@@ -123,6 +122,8 @@ export const FirebaseProvider = (props) => {
     const logOut = async () => {
         await signOut(firebaseAuth);
         localStorage.removeItem('myspace-user');
+        sessionStorage.removeItem('documentDataFiles');
+        sessionStorage.removeItem('mediaFiles');
       };
 
     // const putData = (key, data) => set(ref(database, key), data);
@@ -160,7 +161,109 @@ export const FirebaseProvider = (props) => {
         snap.forEach((data)=> console.log(data.data()));
     }
 
-    const uploadFile = (file, path) => {
+    const getFileIcon = (contentType, name) => {
+        const lowerName = name.toLowerCase();
+    
+        if (contentType.includes('pdf') || lowerName.includes('.pdf')) {
+            return pdfIcon;
+        } else if (
+            contentType.includes('presentation') ||
+            lowerName.includes('.ppt') ||
+            lowerName.includes('.pptx')
+        ) {
+            return pptIcon;
+        } else if (
+            contentType.includes('spreadsheet') ||
+            contentType.includes('excel') ||
+            lowerName.includes('.xls') ||
+            lowerName.includes('.xlsx')
+        ) {
+            return sheetsIcon;
+        } else if (
+            contentType.includes('word') ||
+            contentType.includes('document') ||
+            lowerName.includes('.doc') ||
+            lowerName.includes('.docx')
+        ) {
+            return googleDocsIcon;
+        } else if(
+            contentType.includes('text') ||
+            lowerName.includes('.txt')
+        ) {
+            return txtIcon;
+        } else if (
+            contentType.includes('video') ||
+            lowerName.includes('.mp4')
+        ) {
+            return mp4Icon;
+        } else if (
+            contentType.includes('audio') ||
+            lowerName.includes('.mp3')
+        ) {
+            return mp3Icon;
+        } else if (
+            contentType.includes('zip') ||
+            lowerName.includes('.zip')
+        ) {
+            return zipIcon;
+        } else if (
+            lowerName.includes('.png')
+        ) {
+            return pngIcon;
+        } else if (
+            lowerName.includes('.jpeg') ||
+            lowerName.includes('.jpg')
+        ) {
+            return imageIcon; // you can name this jpgIcon if you prefer
+        } else if (
+            lowerName.includes('.html')
+        ) {
+            return htmlIcon;
+        } else if (
+            lowerName.includes('.css')
+        ) {
+            return cssIcon;
+        } else {
+            return defaultIcon; // fallback icon
+        }
+    };
+
+    const fetchFiles = async (folderPath) => {
+        const folderRef = storageRef(storage, folderPath || 'documents/')
+            try {
+                const res = await listAll(folderRef);
+                const filesWithMeta = await Promise.all(
+                    res.items.map(async (item) => {
+                        try {
+                            const [url, metadata] = await Promise.all([
+                                getDownloadURL(item),
+                                getMetadata(item),
+                            ]);
+                            const icon = getFileIcon(metadata.contentType, item.name);
+                            // console.log(metadata)
+    
+                            return {
+                                url,
+                                contentType: metadata.contentType,
+                                name: item.name,
+                                icon,
+                                size:(metadata.size / (1024 * 1024)).toFixed(2) + ' MB',
+                            };
+                        } catch (err) {
+                            console.error(`Error fetching metadata for ${item.name}:`, err);
+                            return null;
+                        }
+                    })
+                );
+                setStoredData(filesWithMeta.filter(Boolean));
+                return filesWithMeta.filter(Boolean);
+            } catch (error) {
+                console.error('Error fetching documents:', error);
+                return [];
+            }
+        };
+
+    const uploadFile = (file, path, onUploadComplete) => {
         const dataRef = storageRef(storage, `${path}/${file.name}`);
         
             const uploadTask = uploadBytesResumable(dataRef, file);
@@ -177,127 +280,29 @@ export const FirebaseProvider = (props) => {
               () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                   setUploadedUrl(downloadURL);
-                  fetchFiles(path)
-                //   if (onUploadComplete) onUploadComplete();
+                  if (onUploadComplete) onUploadComplete();
                 });
+                fetchFiles(path)
               }
             );
     }
 
-    const fetchFiles = async (folderPath) => {
-        const folderRef = storageRef(storage, folderPath || 'documents/')
-            try {
-                const res = await listAll(folderRef);
-                const filesWithMeta = await Promise.all(
-                    res.items.map(async (item) => {
-                        try {
-                            const [url, metadata] = await Promise.all([
-                                getDownloadURL(item),
-                                getMetadata(item),
-                            ]);
-                            // console.log(metadata)
-    
-                            return {
-                                url,
-                                contentType: metadata.contentType,
-                                name: item.name,
-                            };
-                        } catch (err) {
-                            console.error(`Error fetching metadata for ${item.name}:`, err);
-                            return null;
-                        }
-                    })
-                );
-                return filesWithMeta.filter(Boolean);
-            } catch (error) {
-                console.error('Error fetching documents:', error);
-                return [];
-            }
-            console.log()
-        };
-
         //extra
 
-        const getFileIcon = (contentType, name) => {
-            const lowerName = name.toLowerCase();
-        
-            if (contentType.includes('pdf') || lowerName.includes('.pdf')) {
-                return pdfIcon;
-            } else if (
-                contentType.includes('presentation') ||
-                lowerName.includes('.ppt') ||
-                lowerName.includes('.pptx')
-            ) {
-                return pptIcon;
-            } else if (
-                contentType.includes('spreadsheet') ||
-                contentType.includes('excel') ||
-                lowerName.includes('.xls') ||
-                lowerName.includes('.xlsx')
-            ) {
-                return sheetsIcon;
-            } else if (
-                contentType.includes('word') ||
-                contentType.includes('document') ||
-                lowerName.includes('.doc') ||
-                lowerName.includes('.docx')
-            ) {
-                return googleDocsIcon;
-            } else if(
-                contentType.includes('text') ||
-                lowerName.includes('.txt')
-            ) {
-                return txtIcon;
-            } else if (
-                contentType.includes('video') ||
-                lowerName.includes('.mp4')
-            ) {
-                return mp4Icon;
-            } else if (
-                contentType.includes('audio') ||
-                lowerName.includes('.mp3')
-            ) {
-                return mp3Icon;
-            } else if (
-                contentType.includes('zip') ||
-                lowerName.includes('.zip')
-            ) {
-                return zipIcon;
-            } else if (
-                lowerName.includes('.png')
-            ) {
-                return pngIcon;
-            } else if (
-                lowerName.includes('.jpeg') ||
-                lowerName.includes('.jpg')
-            ) {
-                return imageIcon; // you can name this jpgIcon if you prefer
-            } else if (
-                lowerName.includes('.html')
-            ) {
-                return htmlIcon;
-            } else if (
-                lowerName.includes('.css')
-            ) {
-                return cssIcon;
-            } else {
-                return defaultIcon; // fallback icon
-            }
-        };
-
-        const deleteItem = async (folderPath, itemPath) => {
+        const deleteItem = async (folderPath, itemPath, localStorageName) => {
             try {
               const dataItemRef = storageRef(storage, itemPath);
               await deleteObject(dataItemRef);
-              setStateToggle(prev => !prev);
+            //   setStateToggle(prev => !prev);
               console.log("Item deleted successfully");
-              fetchFiles(folderPath); // ✅ Trigger UI update
+              sessionStorage.removeItem(localStorageName);
+                fetchFiles(folderPath); // ✅ Trigger UI update
             } catch (error) {
               console.error("Failed to delete item:", error);
             }
           };
 
-    return <FirebaseContext.Provider value={{firebaseApp, firestore, signupUser,signInWithGoogle, signinUser,  isLoggedIn, loggedInUser, logOut, writeUserData, makeUserSubcollection,getDocument, getDocumentByQuery ,uploadFile, fetchFiles, getFileIcon, deleteItem, uploadedUrl, setUploadedUrl, progress ,stateToggle}}>
+    return <FirebaseContext.Provider value={{firebaseApp, firestore, signupUser,signInWithGoogle, signinUser,  isLoggedIn, loggedInUser, logOut, writeUserData, makeUserSubcollection,getDocument, getDocumentByQuery ,uploadFile, fetchFiles, getFileIcon, deleteItem, uploadedUrl, setUploadedUrl, progress, storedData}}>
         {props.children}
     </FirebaseContext.Provider>
 }

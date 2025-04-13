@@ -120,23 +120,6 @@ const Home = () => {
             </button>
           </div>
         </div>
-        <ul className="space-y-2">
-        {dataList.map((file, idx) => (
-          <li key={idx} className="border p-2 rounded bg-gray-100">
-            <p><strong>Name:</strong> {file.name}</p>
-            <p><strong>Type:</strong> {file.contentType}</p>
-            <a
-              href={file.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 underline"
-            >
-              View File
-            </a>
-          </li>
-        ))}
-      </ul>
-        
       </div>
     </div>
   )
