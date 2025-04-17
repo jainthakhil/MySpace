@@ -29,13 +29,6 @@ const DataItemBox = ({ folderPath, file, index, isMenuOpen, onToggleMenu, menuRe
     return fileName
   }
 
-
-
-
-
-
-
-
   const handleDownload = () => {
     const link = document.createElement('a');
     link.href = file.url;
@@ -53,12 +46,12 @@ const DataItemBox = ({ folderPath, file, index, isMenuOpen, onToggleMenu, menuRe
   return (
     <div
       key={index}
-      className="relative min-h-[200px] w-full flex flex-col items-center justify-center gap-4 bg-gray-700 rounded-xl p-4 shadow-xl/30 text-indigo-100 pt-10 "
+      className="relative h-auto  md:w-full flex flex-col items-center justify-center gap-4 dark:bg-gray-700 bg-gray-200 rounded-xl p-4 shadow-xl/30 dark:text-indigo-100 text-black pt-10 overflow-hidden "
     >
       {/* 3-dot menu button */}
       <div className="absolute top-3 right-3">
         <button ref={menuRef} onClick={onToggleMenu} className='w-4 h-4 cursor-pointer'>
-          <FiMoreVertical className="text-white" size={20} />
+          <FiMoreVertical className="dark:text-white text-gray-800" size={20} />
         </button>
 
         {isMenuOpen && (
@@ -79,12 +72,12 @@ const DataItemBox = ({ folderPath, file, index, isMenuOpen, onToggleMenu, menuRe
         )}
       </div>
 
-      <div className="flex flex-col h-full w-full items-start justify-center d">
+      <div className="flex  h-full w-full md:items-start items-center md:justify-center justify-start overflow-hidden">
 
         <a href={file.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="block w-20 aspect-square"
+          className="block md:w-20 w-15"
         >
           <img
             src={file.icon}
@@ -94,22 +87,20 @@ const DataItemBox = ({ folderPath, file, index, isMenuOpen, onToggleMenu, menuRe
         </a>
 
 
-        <div className="data-box w-full h-full flex flex-col justify-between items-start pt-2 text-pretty">
+        <div className="data-box w-full h-full flex flex-col justify-between  items-center pt-2 text-pretty">
           <a
             href={file.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-indigo-200 text-sm text-left w-3/4"
+            className="hover:text-indigo-200 text-[12px] md:text-sm text-left w-3/4"
           >
             {handleFileName()}
           </a>
-
-          <p className='text-xs text-right w-full'>{file.size}</p>
-
-          
-
         </div>
       </div>
+      <div className="w-full">
+        <p className='text-xs text-right w-full'>{file.size}</p>
+        </div>
     </div>
   );
 };

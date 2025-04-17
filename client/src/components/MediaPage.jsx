@@ -4,11 +4,9 @@ import { usePopUpContext } from '../context/PopUpContext';
 import SidebarComp from './SidebarComp';
 import DataItemBox from './DataItemBox';
 import DropzoneUploader from './UploadComponent';
-import ToastMessage from './DeletePopup';
 import Loader from './Loader';
 import DeleteCard from './DeletePopUpCard';
-import DeleteLoader from './DeleteLoader';
-import DeleteLoadingCard from './DeleteLoadingCard';
+import Header from './Header';
 
 const MediaPage = () => {
     const [mediaDataList, setMediaDataList] = useState([]);
@@ -16,37 +14,41 @@ const MediaPage = () => {
     const firebase = useFirebase();
     const folderPath = 'media/'
     const menuRefs = useRef([]);
-    const [showToast, setShowToast] = useState(false);
     const popupContext = usePopUpContext();
 
+    const loadFiles = async () => {
+        const data = await firebase.getDocument('media');
+        setMediaDataList(data);
+        
+        // const cached = sessionStorage.getItem('mediaFiles');
+        // if (cached) {
+        //     setMediaDataList(JSON.parse(cached));
+        // } else {
+        //     const data = await firebase.fetchFiles('media/');
+        //     setMediaDataList(data);
+        //     sessionStorage.setItem('mediaFiles', JSON.stringify(data));
+        // }
+    };
+
     const handleUploadComplete = () => {
-        sessionStorage.removeItem('mediaFiles');
+        // sessionStorage.removeItem('mediaFiles');
         loadFiles(true);
     };
 
-    const loadFiles = async () => {
-        const cached = sessionStorage.getItem('mediaFiles');
-        if (cached) {
-            setMediaDataList(JSON.parse(cached));
-        } else {
-            const data = await firebase.fetchFiles('media/');
-            setMediaDataList(data);
-            sessionStorage.setItem('mediaFiles', JSON.stringify(data));
-        }
-        console.log("media data is ", mediaDataList);
-    };
     useEffect(() => {
         loadFiles()
-    }, [firebase.fetchFiles])
+        if(mediaDataList) console.log(mediaDataList)
+    }, [firebase])
 
-    //extra
-     useEffect(()=>{
-            if(popupContext.deleteFile !== null){
-                console.log("deleteing file is:",popupContext.deleteFile)
+    useEffect(()=>{
+            if(popupContext.reloadData){
+                loadFiles();
+                popupContext.setReloadData(false);
             }
             console.log(popupContext)
     
-        }, [popupContext.deleteFile])
+        }, [popupContext.reloadData])
+
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -67,11 +69,12 @@ const MediaPage = () => {
         <div className="parent-cont w-full min-h-screen flex bg-gray-800">
             <SidebarComp />
 
-            <div className='w-full min-h-screen flex flex-col items-center justify-center  '>
+            <div className='w-full min-h-screen min-w-max flex flex-col items-center justify-evenly text-black dark:text-white  '>
+            <Header/>
                 <DropzoneUploader path={folderPath} onUploadComplete={handleUploadComplete} />
 
-                <div className="w-full flex flex-col flex-1 items-center text-center bg-gray-800">
-                    <h1 className='text-3xl text-white'>Media files</h1>
+                <div className="w-full flex flex-col flex-1 items-center text-center bg-gray-100 dark:bg-gray-800">
+                    <h1 className='text-3xl dark:text-white text-black'>Media files</h1>
 
                     <div className="w-full h-auto p-4 sm:p-6 md:p-8 lg:p-10">
                     {/* className="w-full h-auto flex items-center justify-center p-10" */
@@ -79,10 +82,9 @@ const MediaPage = () => {
                     }
                     {/* className="grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-6 mt-8 " */}
 
-                        {showToast ? (
-                            <DeleteLoader/>
-                        ) : mediaDataList && mediaDataList.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8" >
+{/* //do changes */}
+                        {mediaDataList && mediaDataList.length > 0 ? (
+                            <div className="grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-6 mt-8" >
                                 {mediaDataList.map((file, index) => (
                                     <DataItemBox
                                         key={index}

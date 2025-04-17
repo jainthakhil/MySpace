@@ -11,10 +11,10 @@ const MediaPage = lazy(() => import('./components/MediaPage.jsx'));
 
 function App() {
   return (
-    <div className="App">
+    <div className="App dark">
       <Suspense fallback={<div className="text-white text-center mt-10">Loading...</div>}>
         <Routes>
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/documents" element={<DocumentsPage />} />
