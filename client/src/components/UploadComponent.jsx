@@ -33,7 +33,7 @@ const DropzoneUploader = ({ path, onUploadComplete}) => {
 
   return (
     <div className="w-full flex bg-gray-100 dark:bg-gray-800">
-      <div className="flex flex-col flex-grow items-center justify-center p-10">
+      <div className="flex flex-col flex-grow items-center justify-center px-10">
         <div
           {...getRootProps()}
           className="flex flex-col items-center justify-center w-full min-w-50 h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-white dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition"

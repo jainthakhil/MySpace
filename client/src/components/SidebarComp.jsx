@@ -1,77 +1,3 @@
-// import React from 'react';
-// import { NavLink, useNavigate } from 'react-router-dom';
-// import logoImg from '../assets/logo.png';
-// import mediaImg from '../assets/mediaImg.png';
-// import logoutImg from '../assets/logoutImg.png';
-// import documentImg from '../assets/documentImg.png';
-// import { useFirebase } from '../context/Firebase';
-
-// const SidebarComp = () => {
-//     const firebase = useFirebase();
-//     const navigate = useNavigate();
-
-//     const handleLogout = async () => {
-//         await firebase.logOut();
-//         localStorage.clear();
-//         navigate('/signin');
-//     };
-//     return (
-//         <div className="relative bg-white dark:bg-gray-900">
-//             <div className="flex flex-col sm:flex-row sm:justify-around">
-//                 <div className="h-screen w-62 lg:w-72">
-//                     <div className="flex items-center justify-start mx-6 mt-10">
-//                         <img className="h-10" src={logoImg} />
-//                         <span className="text-gray-600 dark:text-gray-300 ml-4 text-2xl font-bold">
-//                             MyXpace
-//                         </span>
-//                     </div>
-
-//                     <nav className="mt-10 px-6">
-//                         <NavLink
-//                             to="/documents"
-//                             className={({ isActive }) =>
-//                                 `flex items-center p-2 my-6 transition-colors duration-200 rounded-lg ${isActive
-//                                     ? 'bg-gray-600 text-blue-800 bg-gray-600 dark:text-white'
-//                                     : 'text-gray-800 dark:text-gray-100 bg-gray-100 dark:bg-gray-900 hover:text-gray-800 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-gray-600'
-//                                 }`
-//                             }
-//                         >
-//                             <img src={documentImg} alt="Documents" className="h-[24px]" />
-//                             <span className="mx-4 text-lg font-normal">Files</span>
-//                             <span className="flex-grow text-right"></span>
-//                         </NavLink>
-
-//                         <NavLink
-//                             to="/media"
-//                             className={({ isActive }) =>
-//                                 `flex items-center p-2 my-6 transition-colors duration-200 rounded-lg ${isActive
-//                                     ? 'bg-gray-600 text-blue-800 bg-gray-600 dark:text-white'
-//                                     : 'text-gray-800 dark:text-gray-100 bg-gray-100 dark:bg-gray-900 hover:text-gray-800 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-gray-600'
-//                                 }`
-//                             }
-//                         >
-//                             <img src={mediaImg} alt="Media" className="h-[24px]" />
-//                             <span className="mx-4 text-lg font-normal">Media</span>
-//                             <span className="flex-grow text-right"></span>
-//                         </NavLink>
-//                     </nav>
-
-//                     <div className="absolute bottom-0 my-10">
-//                         <button
-//                             className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors duration-200 flex items-center py-2 px-8 cursor-pointer"
-//                             onClick={handleLogout}
-//                         >
-//                             <img src={logoutImg} alt="Logout" className="h-[24px]" />
-//                             <span className="mx-4 font-medium">Logout</span>
-//                         </button>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default SidebarComp;
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import logoImg from '../assets/logo.png';
@@ -122,22 +48,22 @@ const SidebarComp = () => {
                             <NavLink
                                 to="/"
                                 className={({ isActive }) =>
-                                    `flex items-center justify-start w-full px-4 py-2 my-2 font-thin uppercase transition-colors duration-200 ${isActive
+                                    `flex items-center justify-start w-full px-4 py-2 my-2 font-thin transition-colors duration-200 ${isActive
                                         ? 'text-blue-500 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800'
                                         : 'text-gray-500 dark:text-gray-200 hover:text-blue-500 duration-200 text-gray-800 dark:text-gray-100'
                                     }`
                                 }
                             >
                                 <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className="transition-colors duration-300"
-  >
-    <path d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z" />
-  </svg>
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    className="transition-colors duration-300"
+                                >
+                                    <path d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z" />
+                                </svg>
                                 <span className="mx-4 text-md font-normal">Home</span>
                                 <span className="flex-grow text-right"></span>
                             </NavLink>
@@ -146,18 +72,18 @@ const SidebarComp = () => {
                             <NavLink
                                 to="/documents"
                                 className={({ isActive }) =>
-                                    `flex items-center justify-start w-full px-4 py-2 my-2 font-thin uppercase transition-colors duration-200 ${isActive
+                                    `flex items-center justify-start w-full px-4 py-2 my-2 font-thin  transition-colors duration-200 ${isActive
                                         ? 'text-blue-500 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800'
                                         : 'text-gray-500 dark:text-gray-200 hover:text-blue-500 duration-200 text-gray-800 dark:text-gray-100'
                                     }`
                                 }
                             >
-                                <svg  xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className="transition-colors duration-300">  <path d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Z" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    className="transition-colors duration-300">  <path d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Z" /></svg>
                                 <span className="mx-4 text-md font-normal">Files</span>
                                 <span className="flex-grow text-right"></span>
                             </NavLink>
@@ -165,22 +91,54 @@ const SidebarComp = () => {
                             <NavLink
                                 to="/media"
                                 className={({ isActive }) =>
-                                    `flex items-center justify-start w-full px-4 py-2 my-2 font-thin uppercase transition-colors duration-200 ${isActive
+                                    `flex items-center justify-start w-full px-4 py-2 my-2 font-thin transition-colors duration-200 ${isActive
                                         ? 'text-blue-500 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800'
                                         : 'text-gray-500 dark:text-gray-200 hover:text-blue-500 duration-200 text-gray-800 dark:text-gray-100'
                                     }`
                                 }
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className="transition-colors duration-300"><path  fillRule="evenodd"
-      clipRule="evenodd" d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Zm.394 9.553a1 1 0 0 0-1.817.062l-2.5 6A1 1 0 0 0 8 19h8a1 1 0 0 0 .894-1.447l-2-4A1 1 0 0 0 13.2 13.4l-.53.706-1.276-2.553ZM13 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" /></svg>
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    className="transition-colors duration-300"><path fillRule="evenodd"
+                                        clipRule="evenodd" d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Zm.394 9.553a1 1 0 0 0-1.817.062l-2.5 6A1 1 0 0 0 8 19h8a1 1 0 0 0 .894-1.447l-2-4A1 1 0 0 0 13.2 13.4l-.53.706-1.276-2.553ZM13 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" /></svg>
 
                                 <span className="mx-4 text-md font-normal">Media</span>
                                 <span className="flex-grow text-right"></span>
                             </NavLink>
+
+                            <NavLink
+                                to="/myuploads"
+                                className={({ isActive }) =>
+                                    `flex items-center justify-start w-full px-4 py-2 my-2 font-thin  transition-colors duration-200 ${isActive
+                                        ? 'text-blue-500 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800'
+                                        : 'text-gray-500 dark:text-gray-200 hover:text-blue-500 duration-200 text-gray-800 dark:text-gray-100'
+                                    }`
+                                }
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        
+                                        d="M11.75 12a2.25 2.25 0 1 1 4.5 0 2.25 2.25 0 0 1-4.5 0"
+                                    ></path>
+                                    <path
+                                        
+                                        fillRule="evenodd"
+                                        d="M3.464 3.464C2 4.93 2 7.286 2 12s0 7.071 1.464 8.535C4.93 22 7.286 22 12 22s7.071 0 8.535-1.465C22 19.072 22 16.714 22 12s0-7.071-1.465-8.536C19.072 2 16.714 2 12 2S4.929 2 3.464 3.464M6.75 7a.75.75 0 0 0-1.5 0v10a.75.75 0 0 0 1.5 0zm3.78.47a.75.75 0 1 0-1.06 1.06l1.401 1.402A3.73 3.73 0 0 0 10.25 12c0 .764.229 1.475.621 2.068L9.47 15.47a.75.75 0 1 0 1.06 1.06l1.402-1.401A3.73 3.73 0 0 0 14 15.75c.764 0 1.475-.229 2.068-.621l1.402 1.401a.75.75 0 1 0 1.06-1.06l-1.401-1.402A3.73 3.73 0 0 0 17.75 12c0-.764-.229-1.475-.621-2.068L18.53 8.53a.75.75 0 0 0-1.06-1.06L16.068 8.87A3.73 3.73 0 0 0 14 8.25c-.764 0-1.475.229-2.068.621z"
+                                        clipRule="evenodd"
+                                    ></path>
+                                </svg>
+                                <span className="mx-4 text-md font-normal">My Uploads</span>
+                                <span className="flex-grow text-right"></span>
+                            </NavLink>
+
                         </div>
                     </nav>
 

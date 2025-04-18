@@ -46,7 +46,7 @@ const DataItemBox = ({ folderPath, file, index, isMenuOpen, onToggleMenu, menuRe
   return (
     <div
       key={index}
-      className="relative h-auto  md:w-full flex flex-col items-center justify-center gap-4 dark:bg-gray-700 bg-gray-200 rounded-xl p-4 shadow-xl/30 dark:text-indigo-100 text-black pt-10 overflow-hidden "
+      className="relative h-auto flex flex-col items-center justify-center gap-4 dark:bg-gray-700 bg-gray-200 rounded-xl p-4 shadow-xl/30 dark:text-indigo-100 text-black pt-10  "
     >
       {/* 3-dot menu button */}
       <div className="absolute top-3 right-3">
@@ -72,30 +72,33 @@ const DataItemBox = ({ folderPath, file, index, isMenuOpen, onToggleMenu, menuRe
         )}
       </div>
 
-      <div className="flex  h-full w-full md:items-start items-center md:justify-center justify-start overflow-hidden">
+      <div className="flex h-full w-full md:items-start items-center md:justify-center justify-start ">
 
         <a href={file.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="block md:w-20 w-15"
+          className="block w-20 "
         >
           <img
             src={file.icon}
             alt="icon"
-            className="w-full h-full object-contain"
+            className="w-3/4 object-contain"
           />
         </a>
 
 
-        <div className="data-box w-full h-full flex flex-col justify-between  items-center pt-2 text-pretty">
-          <a
+        <div className="data-box w-1/2 h-full flex flex-col justify-between  items-center pt-2 text-pretty">
+          {/* <a
             href={file.url}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-indigo-200 text-[12px] md:text-sm text-left w-3/4"
           >
             {handleFileName()}
-          </a>
+          </a> */}
+          <p className="text-[12px] md:text-sm text-left line-clamp-2 w-3/4 ">
+          {handleFileName()}
+          </p>
         </div>
       </div>
       <div className="w-full">

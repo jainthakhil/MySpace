@@ -1,12 +1,12 @@
 import { React, useEffect, useState, useRef } from 'react'
 import { useFirebase } from '../context/Firebase'
 import { usePopUpContext } from '../context/PopUpContext';
-import SidebarComp from './SidebarComp';
-import DataItemBox from './DataItemBox';
-import DropzoneUploader from './UploadComponent';
-import Loader from './Loader';
-import DeleteCard from './DeletePopUpCard';
-import Header from './Header';
+import SidebarComp from '../components/SidebarComp';
+import DataItemBox from '../components/DataItemBox';
+import DropzoneUploader from '../components/UploadComponent';
+import Loader from '../components/Loader';
+import DeleteCard from '../components/DeletePopUpCard';
+import Header from '../components/Header';
 
 const MediaPage = () => {
     const [mediaDataList, setMediaDataList] = useState([]);
@@ -69,7 +69,7 @@ const MediaPage = () => {
         <div className="parent-cont w-full min-h-screen flex bg-gray-800">
             <SidebarComp />
 
-            <div className='w-full min-h-screen min-w-max flex flex-col items-center justify-evenly text-black dark:text-white  '>
+            <div className='w-full min-h-screen flex flex-col items-center justify-evenly text-black dark:text-white  '>
             <Header/>
                 <DropzoneUploader path={folderPath} onUploadComplete={handleUploadComplete} />
 
@@ -84,7 +84,7 @@ const MediaPage = () => {
 
 {/* //do changes */}
                         {mediaDataList && mediaDataList.length > 0 ? (
-                            <div className="grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-6 mt-8" >
+                            <div className="grid grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] gap-6 mt-8 " >
                                 {mediaDataList.map((file, index) => (
                                     <DataItemBox
                                         key={index}

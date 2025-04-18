@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useFirebase, storage } from '../context/Firebase'
 import folderImg from '../assets/folder.png'
 import photoImg from '../assets/photo.png'
-import SidebarComp from './SidebarComp'
+import SidebarComp from '../components/SidebarComp'
+import Loader from '../components/Loader'
 
 const Home = () => {
 
@@ -59,14 +60,27 @@ const Home = () => {
 
         <div className="w-full h-auto p-4 sm:p-6 md:p-8 lg:p-10">
 
-          <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-8">
+          {/* <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-8">
           {folders.map((folder) => (
                 <div key={folder} className="h-auto  md:w-full flex flex-col justify-center items-start gap-4 dark:bg-gray-700 bg-gray-200 rounded-xl p-4 shadow-xl/30 dark:text-indigo-100 text-black overflow-hidden ">
                 <img src={folderImg} className="h-15 md:h-20 aspect-square object-contain"  alt="" />
                    <p className='text-xs'>{folder}</p>
                 </div>
               ))}
-          </div>
+          </div> */}
+
+          { folders && folders.length > 0 ? (
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-8 ">
+                            {folders.map((folder) => (
+                <div key={folder} className="h-auto flex flex-col justify-center items-start gap-4 dark:bg-gray-700 bg-gray-200 rounded-xl p-4 shadow-xl/30 dark:text-indigo-100 text-black overflow-hidden ">
+                <img src={folderImg} className="h-15 md:h-20 aspect-square object-contain"  alt="" />
+                   <p className='text-xs'>{folder}</p>
+                </div>
+              ))}
+                            </div>
+                        ) : (
+                            <Loader />
+                        )}
           
         </div>
       </div>
