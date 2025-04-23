@@ -6,11 +6,13 @@ import App from './App.jsx'
 import { FirebaseProvider } from './context/Firebase.jsx'
 import { PopUpContextProvider } from './context/PopUpContext.jsx';
 import { UploadContextProvider } from './context/UploadContext.jsx';
+import { UserProvider } from './context/UserContext.jsx';
 
 createRoot(document.getElementById('root')).render(
 
 
   <FirebaseProvider>
+  <UserProvider>
   <UploadContextProvider>
     <PopUpContextProvider>
       <Router>
@@ -18,6 +20,7 @@ createRoot(document.getElementById('root')).render(
       </Router>
     </PopUpContextProvider>
     </UploadContextProvider>
+    </UserProvider>
   </FirebaseProvider>
 
 

@@ -23,7 +23,7 @@ const SidebarComp = () => {
     };
 
     useEffect(() => {
-        console.log("Sidebar state changed:", isSidebarOpen);
+        // console.log("Sidebar state changed:", isSidebarOpen);
     }, [isSidebarOpen]);
 
     return (
@@ -70,7 +70,7 @@ const SidebarComp = () => {
 
 
                             <NavLink
-                                to="/documents"
+                                to="/folder/documents"
                                 className={({ isActive }) =>
                                     `flex items-center justify-start w-full px-4 py-2 my-2 font-thin  transition-colors duration-200 ${isActive
                                         ? 'text-blue-500 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800'
@@ -89,7 +89,7 @@ const SidebarComp = () => {
                             </NavLink>
 
                             <NavLink
-                                to="/media"
+                                to="/folder/media"
                                 className={({ isActive }) =>
                                     `flex items-center justify-start w-full px-4 py-2 my-2 font-thin transition-colors duration-200 ${isActive
                                         ? 'text-blue-500 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800'
@@ -132,25 +132,25 @@ const SidebarComp = () => {
                                         
                                         fillRule="evenodd"
                                         d="M3.464 3.464C2 4.93 2 7.286 2 12s0 7.071 1.464 8.535C4.93 22 7.286 22 12 22s7.071 0 8.535-1.465C22 19.072 22 16.714 22 12s0-7.071-1.465-8.536C19.072 2 16.714 2 12 2S4.929 2 3.464 3.464M6.75 7a.75.75 0 0 0-1.5 0v10a.75.75 0 0 0 1.5 0zm3.78.47a.75.75 0 1 0-1.06 1.06l1.401 1.402A3.73 3.73 0 0 0 10.25 12c0 .764.229 1.475.621 2.068L9.47 15.47a.75.75 0 1 0 1.06 1.06l1.402-1.401A3.73 3.73 0 0 0 14 15.75c.764 0 1.475-.229 2.068-.621l1.402 1.401a.75.75 0 1 0 1.06-1.06l-1.401-1.402A3.73 3.73 0 0 0 17.75 12c0-.764-.229-1.475-.621-2.068L18.53 8.53a.75.75 0 0 0-1.06-1.06L16.068 8.87A3.73 3.73 0 0 0 14 8.25c-.764 0-1.475.229-2.068.621z"
-                                        clipRule="evenodd"
+                                        
                                     ></path>
                                 </svg>
-                                <span className="mx-4 text-md font-normal">My Uploads</span>
+                                <span className="mx-4 text-md font-normal">My Vault</span>
                                 <span className="flex-grow text-right"></span>
                             </NavLink>
 
                         </div>
                     </nav>
 
-                    <div className="absolute bottom-0 my-10 px-6">
+                    <div className=" w-full absolute bottom-0 my-10 ">
                         <button
-                            className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors duration-200 flex items-center p-2 cursor-pointer
+                            className="w-full text-gray-600 dark:text-gray-300 transition-colors duration-200 flex items-center px-4 py-2 cursor-pointer hover:text-blue-500 duration-200 
                             "
                             onClick={handleLogout}
                         >
                             {/* <img src={logoutImg} alt="Logout" className="h-[24px]" /> */}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 576 512" fill='currentColor'><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z" /></svg>
-                            <span className="mx-4 font-medium">Logout</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 576 512" fill='currentColor'><path fillRule='evenodd' d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z" /></svg>
+                            <span className="mx-4 hover:text-blue-500">Logout</span>
                         </button>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 import { React, useEffect, useState, useRef } from 'react'
+import { useParams, useNavigate } from 'react-router-dom';
 import { useFirebase } from '../context/Firebase'
 import { usePopUpContext } from '../context/PopUpContext';
 import SidebarComp from '../components/SidebarComp'
@@ -11,38 +12,59 @@ import DeleteLoader from '../components/DeleteLoader';
 import Header from '../components/Header';
 import AccountDropdown from '../components/AccountDropdown';
 import DataGrid from '../components/DataGrid';
+import Form from '../TestCom';
+import SubHeader from '../components/SubHeader';
+import UploadingPopup from '../components/UploadingPopup';
 
-const DocumentsPage = () => {
+const DynamicFolderPage = () => {
     const [dataList, setDataList] = useState([]);
+    const { folderId } = useParams();
     const firebase = useFirebase();
     const popupContext = usePopUpContext();
-    const folderPath = 'documents';
+    const folderPath = folderId;
     const [openMenuIndex, setOpenMenuIndex] = useState(null);
     const menuRefs = useRef([]); // <- To keep track of refs for each box
+    const navigate = useNavigate();
+
+    
 
     const loadFiles = async () => {
-        const data = await firebase.getDocument('documents');
+        const data = await firebase.getDocument(folderId);
         setDataList(data);
+
+        // const cached = sessionStorage.getItem('documentDataFiles');
+        // if (cached) {
+        //     setDataList(JSON.parse(cached));
+        // } else {
+        //     const data = await firebase.fetchFiles('documents/');
+        //     setDataList(data);
+        //     sessionStorage.setItem('documentDataFiles', JSON.stringify(data));
+        // }
+        // console.log("document data is ", dataList)
     };
 
-    const handleUploadComplete = async () => {
-        // sessionStorage.removeItem('documentDataFiles');
-        // loadFiles(true);
-        // const data = await firebase.getDocument('documents');
-        // setDataList(data);
-        console.log("onuploadcomplete called")
-        
-    };
-
- 
      useEffect(() => {
          loadFiles()
-     }, [firebase])
+         
+     }, [firebase, navigate])
+
+    
+      useEffect(() => {
+        let timer;
+        if (firebase.uploadedUrl) {
+          timer = setTimeout(() => {
+            popupContext.setShowSuccessCard(false);
+          }, 1000);
+        }
+        return () => clearTimeout(timer);
+      }, [firebase.uploadedUrl ]);
 
     useEffect(()=>{
         if(popupContext.reloadData){
             loadFiles();
             popupContext.setReloadData(false);
+            // popupContext.setShowSuccessCard(false);
+
         }
         // console.log(popupContext)
 
@@ -69,38 +91,15 @@ const DocumentsPage = () => {
             <div className='w-full min-h-screen flex flex-col items-center justify-evenly text-black dark:text-white'>
             <Header/>
             {/* <AccountDropdown/> */}
-                {/* <DropzoneUploader path={folderPath} onUploadComplete={handleUploadComplete} /> */}
+                {/* <DropzoneUploader path={folderPath}  /> */}
                 <div className="w-full flex flex-col flex-1 items-center text-center bg-gray-100 dark:bg-gray-800">
-                    <h1 className='text-3xl'>Document Files</h1>
 
-                    {/* <div className="w-full h-auto p-4 sm:p-6 md:p-8 lg:p-10">
-
-                        { dataList && dataList.length > 0 ? (
-                            <div className="grid grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] gap-6 mt-8">
-                                {dataList.map((file, index) => (
-                                    <DataItemBox
-                                        key={index}
-                                        index={index}
-                                        file={file}
-                                        // folderPath={folderPath}
-                                        isMenuOpen={openMenuIndex === index}
-                                        onToggleMenu={() =>
-                                            setOpenMenuIndex(openMenuIndex === index ? null : index)
-                                        }
-                                        menuRef={(el) => (menuRefs.current[index] = el)}
-                                        localStorageName="documentDataFiles"
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            <Loader />
-                        )}
-                    </div> */}
-                    <DataGrid dataList = {dataList} folderPath = {folderPath} />
-                </div>
-
-                <DropzoneUploader path={folderPath} onUploadComplete={handleUploadComplete} />
+                <SubHeader folderName={folderId}/>
                 
+                    <DataGrid dataList = {dataList}
+                    folderPath = {folderId} />
+                </div>
+                <DropzoneUploader path={folderPath}  />
                 {popupContext.showDeleteCard && popupContext.deleteFile && (
                      <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
                          <DeleteCard
@@ -110,10 +109,15 @@ const DocumentsPage = () => {
                          />
                      </div>
                  )}
+                 {popupContext.showSuccessCard && (
+                    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
+                         <UploadingPopup />
+                     </div>
+                 )}
             </div>
         </div>
      );
  };
 
-export default DocumentsPage
+export default DynamicFolderPage
 

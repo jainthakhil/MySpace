@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { createContext, useContext, useState } from 'react'
+import { useFirebase } from './Firebase';
 
-const UserContext = () => {
-  return (
-    <div>UserContext</div>
-  )
+const User = createContext(null);
+export const useUser = () => useContext(User);
+
+export const UserProvider = (props) => {
+  const [user, setUser] = useState(null);
+
+
+  return <User.Provider value={{ user, setUser }}>
+    {props.children}
+
+  </User.Provider>
 }
-
-export default UserContext

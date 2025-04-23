@@ -4,7 +4,7 @@ import { useFirebase } from '../context/Firebase';
 import DeleteCard from './DeletePopUpCard';
 import { usePopUpContext } from '../context/PopUpContext';
 
-const DataItemBox = ({ folderPath, file, index, isMenuOpen, onToggleMenu, menuRef, localStorageName, onDeleteToast }) => {
+const DataItemBox = ({file, index, isMenuOpen, onToggleMenu, menuRef, localStorageName,}) => {
 
   const popupContext = usePopUpContext();
   const [showCard, setShowCard] = useState(false);
@@ -40,13 +40,13 @@ const DataItemBox = ({ folderPath, file, index, isMenuOpen, onToggleMenu, menuRe
   };
 
   useEffect(() => {
-    console.log(popupContext.showDeleteCard)
+    // console.log(popupContext.showDeleteCard)
   }, [popupContext.showDeleteCard])
 
   return (
     <div
       key={index}
-      className="relative h-auto flex flex-col items-center justify-center gap-4 dark:bg-gray-700 bg-gray-200 rounded-xl p-4 shadow-xl/30 dark:text-indigo-100 text-black pt-10  "
+      className="relative h-[150px] min-w-[150px] flex flex-col items-center justify-center gap-4 dark:bg-gray-700 bg-white rounded-xl p-4 dark:text-indigo-100 text-black pt-10 "
     >
       {/* 3-dot menu button */}
       <div className="absolute top-3 right-3">

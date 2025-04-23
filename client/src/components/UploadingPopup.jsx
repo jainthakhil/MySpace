@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useFirebase } from './context/Firebase';
+import { useFirebase } from '../context/Firebase';
 
 const Truck = () => {
   const firebase = useFirebase();
@@ -42,7 +42,11 @@ const Truck = () => {
       h78.747C231.693,100.736,232.77,106.162,232.77,111.694z" />
           </svg>
         </div>
-        <span className='text-green'>{firebase.progress}</span>
+        {firebase.progress > 0 && firebase.progress < 100 && (
+            <div className="text-sm text-green-700 font-bold dark:text-green-300 pt-4">
+               {firebase.progress}% on the way...
+            </div>
+          )}
       </div>
     </StyledWrapper>
   );

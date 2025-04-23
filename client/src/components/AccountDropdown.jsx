@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useFirebase } from "../context/Firebase";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import profileImg from '../assets/profileImg.jpg'
 
 export default function AccountDropdown() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const storedUser = JSON.parse(localStorage.getItem('myspace-user'));
+
+  const username = storedUser?.displayName || "username";
+  const usermail = storedUser?.email || "mail";
 
   const firebase = useFirebase();
   const navigate = useNavigate();
@@ -13,8 +16,7 @@ export default function AccountDropdown() {
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
-  const username = storedUser.displayName;
-  const usermail = storedUser.email;
+
 
   const handleLogout = async () => {
     await firebase.logOut();
@@ -51,14 +53,14 @@ export default function AccountDropdown() {
   });
 
   return (
-    <section className="bg-gray-2 p-4 dark:bg-dark">
+    <section className="bg-gray-2 p-4 dark:bg-dark z-10 font-dosis">
       <div className="container">
         <div className="flex justify-center">
           <div className="relative inline-block">
             <button
               ref={trigger}
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className=" inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-stroke bg-white dark:bg-gray-800 py-2 px-3 text-sm font-medium text-dark dark:border-dark-3 dark:bg-dark-2 dark:text-white"
+              className=" inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-400 bg-white dark:bg-gray-800 py-2 px-3 text-sm font-medium text-dark dark:border-dark-3 dark:bg-dark-2 dark:text-white"
             >
               Account
               <span
@@ -82,10 +84,10 @@ export default function AccountDropdown() {
               ref={dropdown}
               onFocus={() => setDropdownOpen(true)}
               onBlur={() => setDropdownOpen(false)}
-              className={`absolute right-0 top-full w-[240px] divide-y divide-stroke overflow-hidden rounded-lg bg-white dark:divide-dark-3 dark:bg-gray-600 ${dropdownOpen ? "block" : "hidden"}`}
+              className={`absolute right-0 top-full w-[240px] divide-y divide-stroke overflow-hidden rounded-lg bg-white dark:divide-dark-3 dark:bg-gray-500 ${dropdownOpen ? "block" : "hidden"}`}
             >
               <div className="flex items-center gap-3 px-4 py-3">
-                <div className="relative aspect-square w-10 rounded-full">
+                <div className="relative aspect-square w-10 rounded-full font-cairo">
                   <img
                     src={profileImg}
                     alt="account"
@@ -94,7 +96,7 @@ export default function AccountDropdown() {
                   {/* <span className="absolute -right-0.5 -top-0.5 block h-3.5 w-3.5 rounded-full border-2 border-white bg-green dark:border-dark"></span> */}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-dark dark:text-white">
+                  <p className="text-sm font-bold text-dark dark:text-white text-left">
                     {username}
                   </p>
                   <p className="text-sm text-body-color dark:text-dark-6">
@@ -103,7 +105,7 @@ export default function AccountDropdown() {
                 </div>
               </div>
               <div>
-                <a
+                <Link to={'/my-account'}
                   href="#0"
                   className="flex w-full items-center justify-between px-4 py-2.5 text-sm font-medium text-dark hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
                 >
@@ -126,7 +128,7 @@ export default function AccountDropdown() {
                     </svg>
                     View profile
                   </span>
-                </a>
+                </Link>
                 <a
                   href="#0"
                   className="flex w-full items-center justify-between px-4 py-2.5 text-sm font-medium text-dark hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"

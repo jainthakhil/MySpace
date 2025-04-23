@@ -1,22 +1,33 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useFirebase } from '../context/Firebase.jsx';
+import { usePopUpContext } from '../context/PopUpContext.jsx';
 import SuccessCard from './SucessMessage.jsx';
 
 
 const DropzoneUploader = ({ path, onUploadComplete}) => {
   const firebase = useFirebase();
-  const firebaseApp = firebase.firebaseApp;
+  const popupContext = usePopUpContext();
   const uploadedUrl = firebase.uploadedUrl
 
-
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = useCallback( async(acceptedFiles) => {
     const file = acceptedFiles[0];
+    popupContext.setShowSuccessCard(true);
     if (!file) return;
+    
+    try{
+      await firebase.uploadFile(file, path, () => {
+        if (onUploadComplete) onUploadComplete(); // fire the prop callback
+      });
 
-    firebase.uploadFile(file, path, () => {
-      if (onUploadComplete) onUploadComplete(); // fire the prop callback
-    });
+    } catch(err){
+      console.log("unable to upload file")
+
+    }
+    //  //uploading file
+    // firebase.uploadFile(file, path, () => {
+    //   if (onUploadComplete) onUploadComplete(); // fire the prop callback
+    // });
   }, [[firebase, path, onUploadComplete]]);
 
   useEffect(() => {
@@ -32,8 +43,8 @@ const DropzoneUploader = ({ path, onUploadComplete}) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <div className="w-full flex bg-gray-100 dark:bg-gray-800">
-      <div className="flex flex-col flex-grow items-center justify-center px-10">
+    <div className=" w-full p-10 flex bg-gray-100 dark:bg-gray-800 rounded-lg">
+      <div className="flex flex-col flex-grow items-center justify-center ">
         <div
           {...getRootProps()}
           className="flex flex-col items-center justify-center w-full min-w-50 h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-white dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition"
@@ -59,7 +70,7 @@ const DropzoneUploader = ({ path, onUploadComplete}) => {
               <span className="font-semibold">Click to upload</span> or drag and drop
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Supported: PDF, DOCX, PPTX, XLSX
+             All type of file Support
             </p>
           </div>
         </div>
@@ -71,14 +82,10 @@ const DropzoneUploader = ({ path, onUploadComplete}) => {
               Uploading complete {firebase.progress}%
             </div>
           )}
-
+{/* 
           {uploadedUrl && (
-            <SuccessCard/>
-            /* <div className="mt-4">
-              <p className="text-green-600 dark:text-green-400 text-sm">Uploaded Successfully!</p>
-             
-            </div> */
-          )}
+           
+          )} */}
         </div>
       </div>
     </div>

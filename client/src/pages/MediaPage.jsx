@@ -7,12 +7,13 @@ import DropzoneUploader from '../components/UploadComponent';
 import Loader from '../components/Loader';
 import DeleteCard from '../components/DeletePopUpCard';
 import Header from '../components/Header';
+import DataGrid from '../components/DataGrid';
 
 const MediaPage = () => {
     const [mediaDataList, setMediaDataList] = useState([]);
     const [openMenuIndex, setOpenMenuIndex] = useState(null); // <- New
     const firebase = useFirebase();
-    const folderPath = 'media/'
+    const folderPath = 'media'  //alter mediapath
     const menuRefs = useRef([]);
     const popupContext = usePopUpContext();
 
@@ -37,7 +38,8 @@ const MediaPage = () => {
 
     useEffect(() => {
         loadFiles()
-        if(mediaDataList) console.log(mediaDataList)
+        console.log("firebase is altered and loadFiles is fired")
+        // if(mediaDataList) console.log(mediaDataList)
     }, [firebase])
 
     useEffect(()=>{
@@ -45,7 +47,7 @@ const MediaPage = () => {
                 loadFiles();
                 popupContext.setReloadData(false);
             }
-            console.log(popupContext)
+            // console.log(popupContext)
     
         }, [popupContext.reloadData])
 
@@ -66,31 +68,31 @@ const MediaPage = () => {
     }, [openMenuIndex]);
 
     return (
-        <div className="parent-cont w-full min-h-screen flex bg-gray-800">
+        <div className="parent-cont w-full min-h-screen flex dark:bg-gray-800 bg:white">
             <SidebarComp />
 
             <div className='w-full min-h-screen flex flex-col items-center justify-evenly text-black dark:text-white  '>
             <Header/>
-                <DropzoneUploader path={folderPath} onUploadComplete={handleUploadComplete} />
+                {/* <DropzoneUploader path={folderPath} onUploadComplete={handleUploadComplete} /> */}
 
                 <div className="w-full flex flex-col flex-1 items-center text-center bg-gray-100 dark:bg-gray-800">
                     <h1 className='text-3xl dark:text-white text-black'>Media files</h1>
 
-                    <div className="w-full h-auto p-4 sm:p-6 md:p-8 lg:p-10">
+                    {/* <div className="w-full h-auto p-4 sm:p-6 md:p-8 lg:p-10"> */}
                     {/* className="w-full h-auto flex items-center justify-center p-10" */
                     /* "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8 justify-items-stretch " */
                     }
                     {/* className="grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-6 mt-8 " */}
 
 {/* //do changes */}
-                        {mediaDataList && mediaDataList.length > 0 ? (
+                        {/* {mediaDataList && mediaDataList.length > 0 ? (
                             <div className="grid grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] gap-6 mt-8 " >
                                 {mediaDataList.map((file, index) => (
                                     <DataItemBox
                                         key={index}
                                         index={index}
                                         file={file}
-                                        folderPath={folderPath}
+                                        // folderPath={folderPath}
                                         isMenuOpen={openMenuIndex === index}
                                         onToggleMenu={() =>
                                             setOpenMenuIndex(openMenuIndex === index ? null : index)
@@ -103,8 +105,11 @@ const MediaPage = () => {
                         ) : (
                             <Loader />
                         )}
-                    </div>
+                    </div> */}
+                    <DataGrid dataList = {mediaDataList}
+                    folderPath = {folderPath} />
                 </div>
+                <DropzoneUploader path={folderPath} onUploadComplete={handleUploadComplete} />
 
                 {popupContext.showDeleteCard && popupContext.deleteFile && (
                      <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
