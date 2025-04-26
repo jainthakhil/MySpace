@@ -24,16 +24,6 @@ const DocumentsPage = () => {
         const data = await firebase.getDocument('documents');
         setDataList(data);
     };
-
-    const handleUploadComplete = async () => {
-        // sessionStorage.removeItem('documentDataFiles');
-        // loadFiles(true);
-        // const data = await firebase.getDocument('documents');
-        // setDataList(data);
-        console.log("onuploadcomplete called")
-        
-    };
-
  
      useEffect(() => {
          loadFiles()
@@ -99,7 +89,7 @@ const DocumentsPage = () => {
                     <DataGrid dataList = {dataList} folderPath = {folderPath} />
                 </div>
 
-                <DropzoneUploader path={folderPath} onUploadComplete={handleUploadComplete} />
+                <DropzoneUploader path={folderPath}  />
                 
                 {popupContext.showDeleteCard && popupContext.deleteFile && (
                      <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">

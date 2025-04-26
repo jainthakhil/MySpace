@@ -31,11 +31,6 @@ const MediaPage = () => {
         // }
     };
 
-    const handleUploadComplete = () => {
-        // sessionStorage.removeItem('mediaFiles');
-        loadFiles(true);
-    };
-
     useEffect(() => {
         loadFiles()
         console.log("firebase is altered and loadFiles is fired")
@@ -109,7 +104,7 @@ const MediaPage = () => {
                     <DataGrid dataList = {mediaDataList}
                     folderPath = {folderPath} />
                 </div>
-                <DropzoneUploader path={folderPath} onUploadComplete={handleUploadComplete} />
+                <DropzoneUploader path={folderPath} />
 
                 {popupContext.showDeleteCard && popupContext.deleteFile && (
                      <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">

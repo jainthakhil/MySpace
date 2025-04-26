@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { initializeApp } from 'firebase/app'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile } from 'firebase/auth'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile, sendPasswordResetEmail } from 'firebase/auth'
 import { getDatabase } from 'firebase/database';
 import { getFirestore, collection, addDoc, setDoc, doc, getDoc, getDocs, updateDoc, arrayUnion, query, where } from 'firebase/firestore'
 import { getStorage, getDownloadURL, listAll, ref as storageRef, deleteObject, uploadBytesResumable } from 'firebase/storage'
@@ -34,6 +34,7 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
+const auth = getAuth();
 const database = getDatabase(firebaseApp);
 const firestore = getFirestore(firebaseApp);
 export const storage = getStorage(firebaseApp);
@@ -60,7 +61,7 @@ export const FirebaseProvider = (props) => {
             if (user) {
                 localStorage.setItem('myspace-user', JSON.stringify(user));
                 setLoggedInUser(user)
-               await getAllSharedUploads();
+                await getAllSharedUploads();
             }
             else {
                 setLoggedInUser(null)
@@ -68,7 +69,8 @@ export const FirebaseProvider = (props) => {
             }
             console.log(loggedInUserMail)
         })
-        
+        // console.log(auth);
+
 
     }, [])
 
@@ -101,6 +103,21 @@ export const FirebaseProvider = (props) => {
             })
             .catch((error) => {
                 console.log(error);
+            });
+    }
+
+    const resetPassword = async (email) => {
+        return sendPasswordResetEmail(auth, email)
+            .then(() => {
+               console.log("password reset mail sent successfuly")
+               alert("password reset mail sent successfuly")
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(error);
+                
+                // ..
             });
     }
 
@@ -178,22 +195,22 @@ export const FirebaseProvider = (props) => {
         else {
             collectionname = "shared_uploads"
         }
-            try {
-                const docRef = doc(firestore, collectionname, folderPath); // "uploads" is the collection name
-                const docSnap = await getDoc(docRef);
+        try {
+            const docRef = doc(firestore, collectionname, folderPath); // "uploads" is the collection name
+            const docSnap = await getDoc(docRef);
 
-                if (docSnap.exists()) {
-                    await updateDoc(docRef, {
-                        files: arrayUnion(fileData),
-                    });
-                } else {
-                    await setDoc(docRef, {
-                        files: [fileData],
-                    });
-                }
-            } catch (error) {
-                console.error("Error saving file metadata:", error);
+            if (docSnap.exists()) {
+                await updateDoc(docRef, {
+                    files: arrayUnion(fileData),
+                });
+            } else {
+                await setDoc(docRef, {
+                    files: [fileData],
+                });
             }
+        } catch (error) {
+            console.error("Error saving file metadata:", error);
+        }
 
         // try{
         //     const collRef = collection(firestore, "uploads", "shared", folderPath);
@@ -283,7 +300,7 @@ export const FirebaseProvider = (props) => {
             lowerName.includes('.xls') ||
             lowerName.includes('.xlsx')
         ) {
-           
+
             return sheetsIcon;
         } else if (
             contentType.includes('word') ||
@@ -515,7 +532,7 @@ export const FirebaseProvider = (props) => {
         await deleteItem(folderPath, fileData);
     };
 
-    return <FirebaseContext.Provider value={{ firebaseApp, firestore, signupUser, signInWithGoogle, signinUser, isLoggedIn, loggedInUser, logOut, addUserToStore, getDocument, getDocumentByQuery, uploadFile, deleteFile, uploadedUrl, setUploadedUrl, progress, folders, sharedUploads, getAllSharedUploads }}>
+    return <FirebaseContext.Provider value={{ firebaseApp, firestore, signupUser, signInWithGoogle, signinUser,resetPassword, isLoggedIn, loggedInUser, logOut, addUserToStore, getDocument, getDocumentByQuery, uploadFile, deleteFile, uploadedUrl, setUploadedUrl, progress, folders, sharedUploads, getAllSharedUploads }}>
         {props.children}
     </FirebaseContext.Provider>
 }

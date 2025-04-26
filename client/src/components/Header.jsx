@@ -54,12 +54,12 @@ const Header = () => {
   return (
     <div className="w-full flex p-2">
 
-     <div className=' bg-white dark:bg-gray-800 w-full flex items-center justify-between mb-5 border-1 rounded-md border-gray-600 mx-auto' >
-      <div className="flex px-6">
-        <h1 className='text-sm'>Welcome back, <span className='text-lg font-bold'>{username}</span> </h1>
+     <div className=' bg-white dark:bg-sidebar w-full flex items-center justify-between mb-5 border-1 rounded-md border-gray-600 mx-auto' >
+      <div className="flex px-3 md:px-6">
+        <h1 className=' text-[12px] md:text-sm'>Welcome back, <span className=' text-sm md:text-lg font-bold text-iceBlue'>{username}</span> </h1>
       </div>
       <div className='flex items-center'>
-        <div className="date text-[12px]">
+        <div className=" hidden md:block date text-[12px]">
         <p className='text-lg'>{dateTime.time}</p>
           <p className='inline'>{dateTime.day}, </p>
           <p className='inline'> {dateTime.date} {dateTime.month} </p>

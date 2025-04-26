@@ -53,22 +53,22 @@ export default function AccountDropdown() {
   });
 
   return (
-    <section className="bg-gray-2 p-4 dark:bg-dark z-10 font-dosis">
+    <section className="bg-gray-2 p-3 md:p-4 dark:bg-sidebar z-10 font-dosis">
       <div className="container">
         <div className="flex justify-center">
           <div className="relative inline-block">
             <button
               ref={trigger}
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className=" inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-400 bg-white dark:bg-gray-800 py-2 px-3 text-sm font-medium text-dark dark:border-dark-3 dark:bg-dark-2 dark:text-white"
+              className=" inline-flex h-8 md:h-10 items-center justify-center gap-2 rounded-md border border-gray-400 bg-white dark:bg-sidebar py-2 px-2 md:px-3 text-sm font-medium text-dark dark:border-dark-3 dark:bg-dark-2 dark:text-white"
             >
               Account
               <span
                 className={`duration-100 ${dropdownOpen ? "-scale-y-100" : ""}`}
               >
                 <svg
-                  width="18"
-                  height="18"
+                  width="16"
+                  height="16"
                   viewBox="0 0 20 20"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"

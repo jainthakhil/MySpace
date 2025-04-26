@@ -13,7 +13,8 @@ export default {
           xs: '2px',
         },
         colors:{
-          brandColor: '#545454',
+          darkBackground: '#123458',
+          truckGray: '#7D7C7C',
         }
       },
     },

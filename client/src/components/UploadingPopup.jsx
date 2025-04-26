@@ -7,6 +7,7 @@ const Truck = () => {
   return (
     <StyledWrapper>
       <div className="w-[200px] h-[200px] flex flex-col items-center justify-center dark:bg-white bg-gray-300 rounded-lg">
+      <p className='text-black font-bold animate-bounce'>On the way...</p>
         <div className="truckWrapper dark:bg-white h-1/2 bg-gray-300 rounded-lg justify-end">
           <div className="truckBody">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 198 93" className="trucksvg">
@@ -44,7 +45,7 @@ const Truck = () => {
         </div>
         {firebase.progress > 0 && firebase.progress < 100 && (
             <div className="text-sm text-green-700 font-bold dark:text-green-300 pt-4">
-               {firebase.progress}% on the way...
+               {firebase.progress}% completed
             </div>
           )}
       </div>

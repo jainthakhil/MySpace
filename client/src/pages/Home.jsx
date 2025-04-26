@@ -70,20 +70,22 @@ const Home = () => {
     <div className="parent-cont w-full min-h-screen flex ">
       <SidebarComp />
 
-      <div className="w-full min-h-screen bg-gray-100 dark:bg-gray-800 text-black dark:text-white text-center flex flex-col">
+      <div className="w-full min-h-screen bg-gray-100 dark:bg-darkBack text-black dark:text-white text-center flex flex-col">
         <Header />
         {/* <div className='w-full h-20 flex items-center justify-center relative p-4'>
         <BackBtn/>
         <h1 className='md:text-5xl text-lg'> Public Folders</h1>
         </div> */}
         <SubHeader folderName = "Public Folders" />
-       
+
+        {/* <Truck /> */}
         
 
         <div className="w-full h-auto p-4 sm:p-6 md:p-8 lg:p-10">
 
           {dataList && dataList.length > 0 ? (
-            <div className="grid grid-cols-[repeat(auto-fit,_minmax(150px,200px))] gap-6 ">
+            <div className="grid md:grid-cols-[repeat(auto-fit,_minmax(150px,200px))] gap-6 
+            grid-cols-[repeat(auto-fit,_minmax(120px,150px))] ">
             <AddFolderCard />
               {dataList.map((folder, index) => (
                 <FolderItem fileData={folder} key={index} />

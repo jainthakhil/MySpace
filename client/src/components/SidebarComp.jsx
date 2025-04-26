@@ -27,7 +27,7 @@ const SidebarComp = () => {
     }, [isSidebarOpen]);
 
     return (
-        <div className="relative bg-white dark:bg-gray-900 ">
+        <div className="relative bg-white dark:bg-sidebar ">
             {/* Hamburger Button */}
             <div className="sm:hidden p-4 ">
                 <SidebarCross isChecked={isSidebarOpen} onChange={handleCross} />
@@ -36,21 +36,22 @@ const SidebarComp = () => {
             <div className="flex flex-col sm:flex-row sm:justify-around">
                 {/* Sidebar */}
                 <div className={`${isSidebarOpen ? 'block' : 'hidden'} sm:block h-screen w-42 md:w-48 lg:w-52 `}>
-                    <div className="w-full flex justify-flex-start p-4 ">
+                    <div className="w-full flex justify-flex-start p-4">
                         <img className="h-8" src={logoImg} alt="Logo" />
                         <span className="text-gray-600 dark:text-gray-300 ml-2 text-xl font-bold">
-                            MyXpace
+                            My<span className='text-iceBlue'>X</span>pace
                         </span>
                     </div>
 
                     <nav className="mt-10">
                         <div>
+                        
                             <NavLink
                                 to="/"
                                 className={({ isActive }) =>
                                     `flex items-center justify-start w-full px-4 py-2 my-2 font-thin transition-colors duration-200 ${isActive
-                                        ? 'text-blue-500 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800'
-                                        : 'text-gray-500 dark:text-gray-200 hover:text-blue-500 duration-200 text-gray-800 dark:text-gray-100'
+                                        ? 'text-darkBack dark:text-myWhite border-r-4 border-iceBlue bg-gradient-to-r from-white to-myWhite dark:from-sidebar dark:to-gray-400'
+                                        : 'text-gray-500 dark:text-gray-200  hover:bg-gradient-to-r from-white to-myWhite dark:from-sidebar dark:to-gray-500 duration-200 text-gray-800 dark:text-gray-100'
                                     }`
                                 }
                             >
@@ -72,9 +73,9 @@ const SidebarComp = () => {
                             <NavLink
                                 to="/folder/documents"
                                 className={({ isActive }) =>
-                                    `flex items-center justify-start w-full px-4 py-2 my-2 font-thin  transition-colors duration-200 ${isActive
-                                        ? 'text-blue-500 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800'
-                                        : 'text-gray-500 dark:text-gray-200 hover:text-blue-500 duration-200 text-gray-800 dark:text-gray-100'
+                                   `flex items-center justify-start w-full px-4 py-2 my-2 font-thin transition-colors duration-200 ${isActive
+                                        ? 'text-darkBack dark:text-myWhite border-r-4 border-iceBlue bg-gradient-to-r from-white to-myWhite dark:from-sidebar dark:to-gray-400'
+                                        : 'text-gray-500 dark:text-gray-200  hover:bg-gradient-to-r from-white to-myWhite dark:from-sidebar dark:to-gray-500 duration-200 text-gray-800 dark:text-gray-100'
                                     }`
                                 }
                             >
@@ -91,9 +92,9 @@ const SidebarComp = () => {
                             <NavLink
                                 to="/folder/media"
                                 className={({ isActive }) =>
-                                    `flex items-center justify-start w-full px-4 py-2 my-2 font-thin transition-colors duration-200 ${isActive
-                                        ? 'text-blue-500 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800'
-                                        : 'text-gray-500 dark:text-gray-200 hover:text-blue-500 duration-200 text-gray-800 dark:text-gray-100'
+                                   `flex items-center justify-start w-full px-4 py-2 my-2 font-thin transition-colors duration-200 ${isActive
+                                        ? 'text-darkBack dark:text-myWhite border-r-4 border-iceBlue bg-gradient-to-r from-white to-myWhite dark:from-sidebar dark:to-gray-400'
+                                        : 'text-gray-500 dark:text-gray-200  hover:bg-gradient-to-r from-white to-myWhite dark:from-sidebar dark:to-gray-500 duration-200 text-gray-800 dark:text-gray-100'
                                     }`
                                 }
                             >
@@ -111,9 +112,9 @@ const SidebarComp = () => {
                             <NavLink
                                 to="/myuploads"
                                 className={({ isActive }) =>
-                                    `flex items-center justify-start w-full px-4 py-2 my-2 font-thin  transition-colors duration-200 ${isActive
-                                        ? 'text-blue-500 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800'
-                                        : 'text-gray-500 dark:text-gray-200 hover:text-blue-500 duration-200 text-gray-800 dark:text-gray-100'
+                                    `flex items-center justify-start w-full px-4 py-2 my-2 font-thin transition-colors duration-200 ${isActive
+                                        ? 'text-darkBack dark:text-myWhite border-r-4 border-iceBlue bg-gradient-to-r from-white to-myWhite dark:from-sidebar dark:to-gray-400'
+                                        : 'text-gray-500 dark:text-gray-200  hover:bg-gradient-to-r from-white to-myWhite dark:from-sidebar dark:to-gray-500 duration-200 text-gray-800 dark:text-gray-100'
                                     }`
                                 }
                             >
@@ -144,13 +145,13 @@ const SidebarComp = () => {
 
                     <div className=" w-full absolute bottom-0 my-10 ">
                         <button
-                            className="w-full text-gray-600 dark:text-gray-300 transition-colors duration-200 flex items-center px-4 py-2 cursor-pointer hover:text-blue-500 duration-200 
+                            className="w-full text-gray-600 dark:text-gray-300 transition-colors duration-200 flex items-center px-4 py-2 cursor-pointer hover:bg-gradient-to-r from-white to-myWhite dark:from-sidebar dark:to-gray-500 duration-200 
                             "
                             onClick={handleLogout}
                         >
                             {/* <img src={logoutImg} alt="Logout" className="h-[24px]" /> */}
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 576 512" fill='currentColor'><path fillRule='evenodd' d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z" /></svg>
-                            <span className="mx-4 hover:text-blue-500">Logout</span>
+                            <span className="mx-4">Logout</span>
                         </button>
                     </div>
                 </div>

@@ -43,7 +43,7 @@ const DropzoneUploader = ({ path, onUploadComplete}) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <div className=" w-full p-10 flex bg-gray-100 dark:bg-gray-800 rounded-lg">
+    <div className=" w-full p-10 flex bg-gray-100 dark:bg-darkBack">
       <div className="flex flex-col flex-grow items-center justify-center ">
         <div
           {...getRootProps()}

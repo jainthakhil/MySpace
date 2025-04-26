@@ -12,11 +12,13 @@ const MediaPage = lazy(() => import('./pages/MediaPage.jsx'));
 const MyUploadPage = lazy(() => import('./pages/MyUploadPage.jsx'));
 const CommonTestPage = lazy(() => import('./pages/CommonTestPage.jsx'))
 const AccountPage = lazy(() => import('./pages/AccountPage.jsx'))
+// const SignInPage = lazy(() => import('./TestCom.jsx'));
+import Loader from './components/Loader.jsx';
 
 function App() {
   return (
-    <div className="App bg-white dark:bg-gray-700 font-cairo">
-      <Suspense fallback={<div className="text-white text-center mt-10">Loading...</div>}>
+    <div className="App bg-white dark:bg-darkBack font-cairo min-w-[450px]">
+      <Suspense fallback={<div className=" w-full min-h-screen flex items-center justify-center text-white text-center"><Loader/></div>}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signin" element={<SignInPage />} />

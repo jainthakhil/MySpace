@@ -22,7 +22,7 @@ const MyUploadPage = () => {
     // const folderPath = 'myuploads/';
 
     return (
-        <div className="parent-cont w-full min-h-screen flex dark:bg-gray-800 bg:white">
+        <div className="parent-cont w-full min-h-screen flex dark:bg-darkBack bg:white">
             <SidebarComp />
             <div className='w-full min-h-screen flex flex-col items-center text-black dark:text-white'>
                 <Header />

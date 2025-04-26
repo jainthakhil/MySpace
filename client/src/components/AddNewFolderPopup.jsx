@@ -18,14 +18,14 @@ const AddNewFolderPopup = () => {
     if (!folderName.trim() || !file){
       alert("Please provide both, folder name and file :(");
       return 
-
-    } 
+    }
+    const cleanFolderName = folderName.trim();
 
     // setUploading(true);
     // popupContext.setShowAddNewFolderCard(false);
 
     try {
-      await firebase.uploadFile(file, folderName)
+      await firebase.uploadFile(file, cleanFolderName)
       popupContext.setShowSuccessCard(true);
       // const fileRef = ref(storage, `${fileName}/${file.name}`);
       // await uploadBytes(fileRef, file);
@@ -55,10 +55,6 @@ const AddNewFolderPopup = () => {
     <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6">
   <path d="M195.2 195.2a64 64 0 0 1 90.496 0L512 421.504 738.304 195.2a64 64 0 0 1 90.496 90.496L602.496 512 828.8 738.304a64 64 0 0 1-90.496 90.496L512 602.496 285.696 828.8a64 64 0 0 1-90.496-90.496L421.504 512 195.2 285.696a64 64 0 0 1 0-90.496z"/>
 </svg>
-
-
-
-
 
     </button>
       <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Upload File to Folder</h2>

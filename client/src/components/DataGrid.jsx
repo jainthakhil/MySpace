@@ -25,7 +25,7 @@ const DataGrid = (prop) => {
         <div className="w-full h-auto p-4 sm:p-6 md:p-8 lg:p-10 akkuu">
             {/* "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8 justify-items-stretch " */}
             {dataList && dataList.length > 0 ? (
-                <div className="grid grid-cols-[repeat(auto-fit,_minmax(150px,200px))] gap-6 mt-8">
+                <div className="grid grid-cols-[repeat(auto-fit,_minmax(150px,180px))] gap-6">
                     {dataList.map((file, index) => (
                         <DataItemBox
                             key={index}

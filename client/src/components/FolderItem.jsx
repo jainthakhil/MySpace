@@ -32,31 +32,31 @@ const FolderItem = (fileData, index) => {
      
     <NavLink 
           to={url}
-          className="relative min-w-[150px] h-[180px] flex flex-col items-center justify-center gap-4 dark:bg-gray-700 bg-white rounded-xl p-4 dark:text-indigo-100 text-gray-600 font-sans hover:scale-102 transition-scale ease-in duration-100  "
+          className=" h-[120px] md:min-w-[150px] md:h-[180px] flex items-center justify-center gap-4 dark:bg-sidebar bg-white rounded-xl p-4 dark:text-indigo-100 text-gray-600 font-sans hover:scale-102 transition-scale ease-in duration-100   "
         >
           {/* 3-dot menu button */}
     
-          <div className="flex flex-col  w-full items-left justify-center text-center ">
+          <div className="flex md:flex-col  w-full items-left justify-center text-center ">
     
               <img
                 src={fileData.fileData.icon}
                 alt="icon"
-                className="h-25 w-fit aspect-square object-contain p-2"
+                className="h-15 md:h-25 w-fit aspect-square object-contain p-2"
               />
 
               {/* <HoverFolderCard/> */}
     
-            <div className="data-box w-full h-full flex flex-col items-center justify-between p-2 text-pretty">
+            <div className="data-box w-full h-full flex flex-col items-center justify-between p-2 text-pretty ">
 
-              <h2 className="w-full md:text-lg text-center capitalize text-left">
+              <h2 className="w-full text-sm md:text-lg text-center capitalize text-left">
               {fileData.fileData.name}
               </h2>
 
-              <div className=" w-full flex items-center justify-between  mt-2">
-              <p className=' text-[12px]'>
+              <div className="w-full md:flex items-center justify-between  mt-2 text-left md:text-center text-[10px] md:text-[12px]">
+              <p className=''>
               {totalFiles} {totalFiles === 1 ? "File" : "Files"}
               </p>
-              <p className='text-[12px]'>{totalSizeMB.toFixed(2)} MB</p>
+              <p className=''>{totalSizeMB.toFixed(2)} MB</p>
 
               </div>
               

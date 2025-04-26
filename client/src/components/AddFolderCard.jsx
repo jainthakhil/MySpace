@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { usePopUpContext } from '../context/PopUpContext';
-import addFolderImg from '../assets/addFolder.png'
+
 const AddFolderCard = () => {
     const popupContext = usePopUpContext();
 
@@ -10,8 +10,8 @@ const AddFolderCard = () => {
     }
     return (
       <StyledWrapper>
-        <div className="card w-full">
-          <button className="card2  w-full flex items-center  justify-center bg-white dark:bg-gray-700 h-[180px] cursor-pointer dark:text-[#f5f5f5] text-gray-700" onClick={handleAddNewFolder}>
+        <div className="card h-[120px] md:min-w-[150px] md:h-[180px] rounded-xl ">
+          <button className="card2 w-full h-[120px] md:min-w-[150px] md:h-[180px]  flex items-center  justify-center bg-white dark:bg-sidebar cursor-pointer dark:text-myWhite text-gray-700 rounded-xl" onClick={handleAddNewFolder}>
           {/* Create new Folder */}
           {/* <img src={addFolderImg}  className='h-1/2' alt="" />
            */}
@@ -23,7 +23,7 @@ const AddFolderCard = () => {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="text-gray-600 dark:text-[#f5f5f5]"
+            className="text-gray-600 dark:text-myWhite w-[60px] md:w-[120px]"
           >
             <path
               d="M10 14H12M12 14H14M12 14V16M12 14V12"
@@ -53,7 +53,7 @@ const AddFolderCard = () => {
      ${'' /* height: 254px; */}
      ${'' /* background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%); */}
      background-image: linear-gradient(163deg, #4294FF 0%, #4294FF 100%);
-     border-radius: 20px;
+     ${'' /* border-radius: 20px; */}
      transition: all .3s;
     }
   
@@ -61,7 +61,7 @@ const AddFolderCard = () => {
      ${'' /* width: 190px; */}
      ${'' /* height: 254px; */}
      ${'' /* background-color: #1a1a1a; */}
-     border-radius:20px;
+     ${'' /* border-radius:20px; */}
      transition: all .2s;
     }
   

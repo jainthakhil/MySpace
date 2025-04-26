@@ -86,13 +86,13 @@ const DynamicFolderPage = () => {
     }, [openMenuIndex]);
 
     return (
-        <div className="parent-cont w-full min-h-screen flex dark:bg-gray-800 bg:white ">
+        <div className="parent-cont w-full min-h-screen flex dark:bg-darkBack bg-gray-100 ">
             <SidebarComp />
             <div className='w-full min-h-screen flex flex-col items-center justify-evenly text-black dark:text-white'>
             <Header/>
             {/* <AccountDropdown/> */}
                 {/* <DropzoneUploader path={folderPath}  /> */}
-                <div className="w-full flex flex-col flex-1 items-center text-center bg-gray-100 dark:bg-gray-800">
+                <div className="w-full flex flex-col flex-1 items-center text-center bg-gray-100 dark:bg-darkBack">
 
                 <SubHeader folderName={folderId}/>
                 

@@ -33,8 +33,6 @@ const MyUploadPage = () => {
 
     useEffect(() => {
         loadFiles();
-        console.log(myFolder);
-
     }, [firebase, navigate])
 
     useEffect(() => {
@@ -71,27 +69,19 @@ const MyUploadPage = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [openMenuIndex]);
 
-    const handleUploadComplete = async () => {
-        // sessionStorage.removeItem('documentDataFiles');
-        // loadFiles(true);
-        // const data = await firebase.getDocument('documents');
-        // setDataList(data);
-        console.log("onuploadcomplete called")
-
-    };
 
     return (
-        <div className="parent-cont w-full min-h-screen flex dark:bg-gray-800 bg:white">
+        <div className="parent-cont w-full min-h-screen flex dark:bg-darkBack bg-gray-100">
             <SidebarComp />
             <div className='w-full min-h-screen flex flex-col items-center justify-evenly text-black dark:text-white'>
                 <Header />
 
-                <div className="w-full flex flex-col flex-1 items-center text-center bg-gray-100 dark:bg-gray-800">
+                <div className="w-full flex flex-col flex-1 items-center text-center bg-gray-100 dark:bg-darkBack">
                 <SubHeader folderName={folderName} />
                     <DataGrid dataList={myFiles} />
                 </div>
 
-                <DropzoneUploader path={myFolder} onUploadComplete={handleUploadComplete} />
+                <DropzoneUploader path={myFolder} />
 
                 {popupContext.showDeleteCard && popupContext.deleteFile && (
                     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">

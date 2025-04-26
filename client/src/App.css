@@ -6,10 +6,17 @@
 
 @import "tailwindcss";
 
+
 @theme {
-  --font-dosis:'Dosis', 'sans-serif';
-  --font-cairo:'Cairo', 'sans-serif';
-  --font-poetsen:'Poetsen One', 'sans-serif';
+  --font-dosis: 'Dosis', 'sans-serif';
+  --font-cairo: 'Cairo', 'sans-serif';
+  --font-poetsen: 'Poetsen One', 'sans-serif';
+
+  /* --color-darkBack: #222831; */
+  --color-darkBack: #222222;
+  --color-sidebar: #393E46;
+  --color-myWhite: #EEEEEE;
+  --color-iceBlue: #00ADB5;
 
 }
 
