@@ -29,13 +29,13 @@ const SidebarComp = () => {
     return (
         <div className="relative bg-white dark:bg-sidebar ">
             {/* Hamburger Button */}
-            <div className="sm:hidden p-4 ">
+            <div className="sm:hidden p-2 ">
                 <SidebarCross isChecked={isSidebarOpen} onChange={handleCross} />
             </div>
 
             <div className="flex flex-col sm:flex-row sm:justify-around">
                 {/* Sidebar */}
-                <div className={`${isSidebarOpen ? 'block' : 'hidden'} sm:block h-screen w-42 md:w-48 lg:w-52 `}>
+                <div className={`${isSidebarOpen ? 'block' : 'hidden'} sm:block h-screen w-38 sm:w-42 md:w-48 lg:w-52 `}>
                     <div className="w-full flex justify-flex-start p-4">
                         <img className="h-8" src={logoImg} alt="Logo" />
                         <span className="text-gray-600 dark:text-gray-300 ml-2 text-xl font-bold">

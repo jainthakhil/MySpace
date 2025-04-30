@@ -22,10 +22,10 @@ const DataGrid = (prop) => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [openMenuIndex]);
     return (
-        <div className="w-full h-auto p-4 sm:p-6 md:p-8 lg:p-10 akkuu">
+        <div className="w-full h-auto  p-4 sm:p-6 md:p-8 lg:p-10">
             {/* "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8 justify-items-stretch " */}
             {dataList && dataList.length > 0 ? (
-                <div className="grid grid-cols-[repeat(auto-fit,_minmax(150px,180px))] gap-6">
+                <div className="w-full grid justify-center md:grid-cols-[repeat(auto-fit,_minmax(120px,150px))] gap-4 md:gap-6  grid-cols-[repeat(auto-fit,_minmax(100px,120px))]">
                     {dataList.map((file, index) => (
                         <DataItemBox
                             key={index}

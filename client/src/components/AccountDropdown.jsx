@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useFirebase } from "../context/Firebase";
+import { getAuth, updateProfile } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
-import profileImg from '../assets/profileImg.jpg'
+import profileImg from '../assets/user.png'
 
 export default function AccountDropdown() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [profile, setProfile] = useState(null);
   const storedUser = JSON.parse(localStorage.getItem('myspace-user'));
 
   const username = storedUser?.displayName || "username";
@@ -16,13 +18,31 @@ export default function AccountDropdown() {
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
+  const auth = getAuth();
+  const handleChangeProfile = async (e) => {
+    setProfile(e.target.files[0]);
+   await updateProfile(auth.currentUser, {
+      photoURL: profile,
+    }).then(() => {
+      console.log("uploaded successfully");
+      console.log(profile);
+      // ...
+    }).catch((error) => {
+      // An error occurred
+      console.log(error);
+      // ...
+    });
+  }
+
+ 
+
 
 
   const handleLogout = async () => {
     await firebase.logOut();
     localStorage.clear();
     navigate('/signin');
-};
+  };
 
 
 
@@ -88,6 +108,7 @@ export default function AccountDropdown() {
             >
               <div className="flex items-center gap-3 px-4 py-3">
                 <div className="relative aspect-square w-10 rounded-full font-cairo">
+
                   <img
                     src={profileImg}
                     alt="account"
@@ -104,12 +125,13 @@ export default function AccountDropdown() {
                   </p>
                 </div>
               </div>
+
               <div>
                 <Link to={'/my-account'}
                   href="#0"
                   className="flex w-full items-center justify-between px-4 py-2.5 text-sm font-medium text-dark hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
                 >
-                 <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-2">
                     <svg
                       width="16"
                       height="16"
@@ -129,11 +151,42 @@ export default function AccountDropdown() {
                     View profile
                   </span>
                 </Link>
+
+                <label className="flex w-full items-center justify-between px-4 py-2.5 text-sm font-medium text-dark hover:bg-gray-50 dark:text-white dark:hover:bg-white/5 cursor-pointer">
+                  <span className="flex items-center gap-2">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 7C6.125 7 4.625 5.525 4.625 3.725C4.625 1.925 6.125 0.449997 8 0.449997C9.875 0.449997 11.375 1.925 11.375 3.725C11.375 5.525 9.875 7 8 7ZM8 1.575C6.75 1.575 5.75 2.55 5.75 3.725C5.75 4.9 6.75 5.875 8 5.875C9.25 5.875 10.25 4.9 10.25 3.725C10.25 2.55 9.25 1.575 8 1.575Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M13.275 15.575C12.975 15.575 12.7 15.325 12.7 15V14.275C12.7 11.675 10.6 9.575 8.00003 9.575C5.40002 9.575 3.30002 11.675 3.30002 14.275V15C3.30002 15.3 3.05002 15.575 2.72502 15.575C2.40002 15.575 2.15002 15.325 2.15002 15V14.275C2.15002 11.05 4.77502 8.45 7.97502 8.45C11.175 8.45 13.8 11.075 13.8 14.275V15C13.825 15.3 13.575 15.575 13.275 15.575Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    Edit profile picture
+                  </span>
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleChangeProfile}
+                  />
+                </label>
+
+
                 <a
                   href="#0"
                   className="flex w-full items-center justify-between px-4 py-2.5 text-sm font-medium text-dark hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
                 >
-                 <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-2">
                     <svg
                       width="16"
                       height="16"
@@ -160,6 +213,9 @@ export default function AccountDropdown() {
                     Settings
                   </span>
                 </a>
+
+
+
                 {/* <a
                   href="#0"
                   className="flex w-full items-center justify-between px-4 py-2.5 text-sm font-medium text-dark hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
@@ -214,9 +270,9 @@ export default function AccountDropdown() {
                   API
                 </a>
               </div> */}
-              <div> 
+              <div>
                 <button onClick={handleLogout} className="flex w-full items-center justify-between px-4 py-2.5 text-sm font-medium text-dark hover:bg-gray-50 dark:text-white dark:hover:bg-white/5 cursor-pointer">
-                <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-2">
                     <svg
                       width="16"
                       height="16"

@@ -46,7 +46,7 @@ const DataItemBox = ({file, index, isMenuOpen, onToggleMenu, menuRef, localStora
   return (
     <div
       key={index}
-      className="relative h-[150px] min-w-[150px] flex flex-col items-center justify-center gap-4 dark:bg-gray-700 bg-white rounded-xl p-4 dark:text-indigo-100 text-black pt-10 "
+      className="relative h-[120px]  md:h-[150px] flex flex-col items-center justify-center gap-4 dark:bg-gray-700 bg-white rounded-xl p-4 dark:text-indigo-100 text-black pt-10 "
     >
       {/* 3-dot menu button */}
       <div className="absolute top-3 right-3">

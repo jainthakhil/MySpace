@@ -77,13 +77,14 @@ export const FirebaseProvider = (props) => {
     const signupUser = async (email, password, username) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
-            addUserToStore(username, email);
+            // addUserToStore(username, email);
 
             // 🧠 Set displayName after user is created
             await updateProfile(userCredential.user, {
                 displayName: username
             });
-            addUserToStore(username, email);
+            // addUserToStore(username, email);
+            createUserProfile(userCredential.user);
             console.log("User signed up & profile updated:");
             return userCredential.user
         } catch (error) {
@@ -121,9 +122,51 @@ export const FirebaseProvider = (props) => {
             });
     }
 
+    const saveUser = async (file) => {
+        try {
+            const storageRef = ref(storage, `users/${auth.currentUser.email}/${file.name}`);
+            await uploadBytes(storageRef, file); // Upload file to Firebase Storage
+            const downloadURL = await getDownloadURL(storageRef); // Get URL of uploaded file
+        
+            await updateProfile(auth.currentUser, {
+              photoURL: downloadURL, // Set the download URL here, not the file
+            });
+        
+            console.log("Profile picture updated successfully!");
+          } catch (error) {
+            console.log("Error updating profile picture: ", error);
+          }
+    }
+
+    const updateProfilePicture = async(file, path) => {
+        await saveUser(file);
+        
+
+
+    }
+
     const logOut = async () => {
         await signOut(firebaseAuth);
     };
+
+    // new
+    const createUserProfile = async (user) => {
+        if (!user) return;
+
+        try {
+          const userDocRef = doc(firestore, "users", user.email); // users/{email}
+      
+          await setDoc(userDocRef, {
+            email: user.email,
+            name: user.displayName || "No Name",
+            photoURL: user.photoURL || "",
+          });
+      
+          console.log("User profile created successfully!");
+        } catch (error) {
+          console.error("Error creating user profile: ", error);
+        }
+      };
 
     const addUserToStore = async (userName, userEmail) => {
         await addDoc(collection(firestore, "users"), {

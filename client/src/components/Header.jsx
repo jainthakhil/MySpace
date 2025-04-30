@@ -33,26 +33,9 @@ const Header = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // useEffect(() => {
-  //   const updateDateTime = () => {
-  //     const now = new Date();
-
-  //     const day = now.toLocaleDateString('en-US', { weekday: 'long' });       // Monday
-  //     const date = now.toLocaleDateString('en-US', { day: 'numeric' });       // 21
-  //     const month = now.toLocaleDateString('en-US', { month: 'long' });       // April
-  //     const time = now.toLocaleTimeString();                                  // 10:45:23 AM
-
-  //     setDateTime({ day, date, time, month });
-  //   };
-
-  //   updateDateTime();
-  //   const interval = setInterval(updateDateTime, 1000);
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
+ 
   return (
-    <div className="w-full flex p-2">
+    <div className="w-full flex p-2 bg-darkBack">
 
      <div className=' bg-white dark:bg-sidebar w-full flex items-center justify-between mb-5 border-1 rounded-md border-gray-600 mx-auto' >
       <div className="flex px-3 md:px-6">

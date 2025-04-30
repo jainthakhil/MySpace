@@ -84,8 +84,8 @@ const Home = () => {
         <div className="w-full h-auto p-4 sm:p-6 md:p-8 lg:p-10">
 
           {dataList && dataList.length > 0 ? (
-            <div className="grid md:grid-cols-[repeat(auto-fit,_minmax(150px,200px))] gap-6 
-            grid-cols-[repeat(auto-fit,_minmax(120px,150px))] ">
+            <div className="w-full grid justify-center md:grid-cols-[repeat(auto-fit,_minmax(150px,200px))] md:gap-6 gap-4 
+            grid-cols-[repeat(auto-fit,_minmax(120px,120px))] ">
             <AddFolderCard />
               {dataList.map((folder, index) => (
                 <FolderItem fileData={folder} key={index} />

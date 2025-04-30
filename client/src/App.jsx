@@ -17,7 +17,7 @@ import Loader from './components/Loader.jsx';
 
 function App() {
   return (
-    <div className="App bg-white dark:bg-darkBack font-cairo min-w-[450px]">
+    <div className="App min-h-screen  bg-white dark:bg-darkBack font-cairo">
       <Suspense fallback={<div className=" w-full min-h-screen flex items-center justify-center text-white text-center"><Loader/></div>}>
         <Routes>
           <Route path="/" element={<Home />} />

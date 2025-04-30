@@ -41,9 +41,10 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gray-900 flex justify-evenly items-center text-white">
-    <h1 className='text-5xl m-10 text-center'>SignUp <br/> <span className='block mx-auto text-center'>on</span>MySpace</h1>
-      <div className="w-full max-w-md bg-gray-800 p-8 rounded-lg shadow-lg">
+    <div className="min-h-screen w-full bg-gray-900 flex flex-col md:flex-row  justify-evenly items-center text-white">
+    <h1 className='text-2xl sm:text-5xl sm:m-10 text-center'>SignUp <br/> <span className='block mx-auto text-center'>on</span>MySpace</h1>
+
+      <div className=" w-3/4 md:w-full max-w-md bg-gray-800 p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center text-white mb-6">Create Account</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">

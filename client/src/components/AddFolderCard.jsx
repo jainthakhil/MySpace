@@ -23,7 +23,7 @@ const AddFolderCard = () => {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="text-gray-600 dark:text-myWhite w-[60px] md:w-[120px]"
+            className="text-gray-600 dark:text-myWhite w-[60px] md:w-[100px]"
           >
             <path
               d="M10 14H12M12 14H14M12 14V16M12 14V12"
