@@ -2,8 +2,9 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { initializeApp } from 'firebase/app'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile, sendPasswordResetEmail } from 'firebase/auth'
 import { getDatabase } from 'firebase/database';
-import { getFirestore, collection, addDoc, setDoc, doc, getDoc, getDocs, updateDoc, arrayUnion, query, where } from 'firebase/firestore'
-import { getStorage, getDownloadURL, listAll, ref as storageRef, deleteObject, uploadBytesResumable } from 'firebase/storage'
+import { getFirestore, collection, addDoc, setDoc, doc, getDoc, getDocs, updateDoc, arrayUnion, query, where, deleteDoc } from 'firebase/firestore'
+import { getStorage, getDownloadURL, listAll, ref as storageRef, deleteObject, uploadBytesResumable, getMetadata } from 'firebase/storage'
+import { usePopUpContext } from './PopUpContext';
 
 // importing file Icons 
 import googleDocsIcon from '../assets/docx.png'
@@ -52,6 +53,7 @@ export const FirebaseProvider = (props) => {
     const [progress, setProgress] = useState(0);
     const [folders, setFolders] = useState([]);
     const [sharedUploads, setSharedUploads] = useState(null);
+    const popupContext = usePopUpContext();
 
     let loggedInUserMail = JSON.parse(localStorage.getItem('myspace-user'))?.email || " ";
     const isLoggedIn = loggedInUser ? true : false;
@@ -110,14 +112,14 @@ export const FirebaseProvider = (props) => {
     const resetPassword = async (email) => {
         return sendPasswordResetEmail(auth, email)
             .then(() => {
-               console.log("password reset mail sent successfuly")
-               alert("password reset mail sent successfuly")
+                console.log("password reset mail sent successfuly")
+                alert("password reset mail sent successfuly")
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 console.log(error);
-                
+
                 // ..
             });
     }
@@ -127,20 +129,20 @@ export const FirebaseProvider = (props) => {
             const storageRef = ref(storage, `users/${auth.currentUser.email}/${file.name}`);
             await uploadBytes(storageRef, file); // Upload file to Firebase Storage
             const downloadURL = await getDownloadURL(storageRef); // Get URL of uploaded file
-        
+
             await updateProfile(auth.currentUser, {
-              photoURL: downloadURL, // Set the download URL here, not the file
+                photoURL: downloadURL, // Set the download URL here, not the file
             });
-        
+
             console.log("Profile picture updated successfully!");
-          } catch (error) {
+        } catch (error) {
             console.log("Error updating profile picture: ", error);
-          }
+        }
     }
 
-    const updateProfilePicture = async(file, path) => {
+    const updateProfilePicture = async (file, path) => {
         await saveUser(file);
-        
+
 
 
     }
@@ -154,19 +156,19 @@ export const FirebaseProvider = (props) => {
         if (!user) return;
 
         try {
-          const userDocRef = doc(firestore, "users", user.email); // users/{email}
-      
-          await setDoc(userDocRef, {
-            email: user.email,
-            name: user.displayName || "No Name",
-            photoURL: user.photoURL || "",
-          });
-      
-          console.log("User profile created successfully!");
+            const userDocRef = doc(firestore, "users", user.email); // users/{email}
+
+            await setDoc(userDocRef, {
+                email: user.email,
+                name: user.displayName || "No Name",
+                photoURL: user.photoURL || "",
+            });
+
+            console.log("User profile created successfully!");
         } catch (error) {
-          console.error("Error creating user profile: ", error);
+            console.error("Error creating user profile: ", error);
         }
-      };
+    };
 
     const addUserToStore = async (userName, userEmail) => {
         await addDoc(collection(firestore, "users"), {
@@ -471,12 +473,91 @@ export const FirebaseProvider = (props) => {
     //     );
     // };
 
-    const uploadFile = (file, path, onUploadComplete) => {
+    // const uploadFile = async (file, path, onUploadComplete) => {
+    //     let foldername = path === loggedInUserMail
+    //         ? `user_only_uploads/${loggedInUserMail}`
+    //         : `shared_uploads/${path}`;
+
+    //     const dataRef = storageRef(storage, `${foldername}/${file.name}`);
+
+    //             popupContext.setShowSuccessCard(true);
+    //             const uploadTask = uploadBytesResumable(dataRef, file);
+    //             console.log(foldername);
+
+    //             let animationFrame = null;
+    //             let displayedProgress = 0;
+    //             let targetProgress = 0;
+
+    //             const animateProgress = () => {
+    //                 if (displayedProgress < targetProgress) {
+    //                     displayedProgress += 1;
+    //                     setProgress(displayedProgress);
+    //                     animationFrame = requestAnimationFrame(animateProgress);
+    //                 }
+    //             };
+
+    //             uploadTask.on(
+    //                 'state_changed',
+    //                 (snapshot) => {
+    //                     const realProgress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+    //                     targetProgress = realProgress;
+
+    //                     // Cancel any previous animation frame and start a new one
+    //                     if (animationFrame) cancelAnimationFrame(animationFrame);
+    //                     animateProgress();
+    //                 },
+    //                 (error) => {
+    //                     console.error('Upload error:', error);
+    //                 },
+    //                 () => {
+    //                     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+    //                         console.log("url for uploaded file", downloadURL);
+    //                         const fileData = {
+    //                             name: file.name,
+    //                             url: downloadURL,
+    //                             contentType: file.type,
+    //                             icon: getFileIcon(file.type, file.name),
+    //                             // icon:defaultIcon,
+    //                             size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
+    //                         };
+
+    //                         if (downloadURL) {
+    //                             console.log("uploaded to storage successfully");
+    //                             setUploadedUrl(downloadURL);
+    //                             saveFileMetadata(fileData, path); // Save to Firestore
+    //                             if (onUploadComplete) onUploadComplete();
+    //                         } else {
+    //                             console.log("error in storing to storage");
+    //                         }
+    //                     });
+    //                 }
+    //             );
+    //     }
+    // };
+
+    const uploadFile = async (file, path, onUploadComplete) => {
         let foldername = path === loggedInUserMail
             ? `user_only_uploads/${loggedInUserMail}`
             : `shared_uploads/${path}`;
 
         const dataRef = storageRef(storage, `${foldername}/${file.name}`);
+        try {
+            // Check if the file already exists
+            await getMetadata(dataRef);
+            popupContext.setAlreadyExist(true);
+            console.warn("Duplicate file. Upload aborted.");
+            // popupContext.setShowSuccessCard(false);
+            return;
+        } catch (error) {
+            if (error.code !== "storage/object-not-found") {
+                console.error("Unexpected error while checking metadata:", error.message);
+                return;
+            }
+            // If error is 'object-not-found', proceed to upload
+        }
+
+        popupContext.setShowSuccessCard(true);
+    
         const uploadTask = uploadBytesResumable(dataRef, file);
         console.log(foldername);
 
@@ -498,7 +579,6 @@ export const FirebaseProvider = (props) => {
                 const realProgress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                 targetProgress = realProgress;
 
-                // Cancel any previous animation frame and start a new one
                 if (animationFrame) cancelAnimationFrame(animationFrame);
                 animateProgress();
             },
@@ -507,48 +587,100 @@ export const FirebaseProvider = (props) => {
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    console.log("url for uploaded file", downloadURL);
+                    console.log("URL for uploaded file:", downloadURL);
+
                     const fileData = {
                         name: file.name,
                         url: downloadURL,
                         contentType: file.type,
                         icon: getFileIcon(file.type, file.name),
-                        // icon:defaultIcon,
                         size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
                     };
 
                     if (downloadURL) {
-                        console.log("uploaded to storage successfully");
+                        console.log("Uploaded to storage successfully");
                         setUploadedUrl(downloadURL);
-                        saveFileMetadata(fileData, path); // Save to Firestore
+                        saveFileMetadata(fileData, path);
                         if (onUploadComplete) onUploadComplete();
                     } else {
-                        console.log("error in storing to storage");
+                        console.log("Error in storing to storage");
                     }
                 });
             }
-        );
+        )
+        // popupContext.setShowSuccessCard(true);
+        // const uploadTask = uploadBytesResumable(dataRef, file);
+        // console.log(foldername);
+
+        // let animationFrame = null;
+        // let displayedProgress = 0;
+        // let targetProgress = 0;
+
+        // const animateProgress = () => {
+        //     if (displayedProgress < targetProgress) {
+        //         displayedProgress += 1;
+        //         setProgress(displayedProgress);
+        //         animationFrame = requestAnimationFrame(animateProgress);
+        //     }
+        // };
+
+        // uploadTask.on(
+        //     'state_changed',
+        //     (snapshot) => {
+        //         const realProgress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        //         targetProgress = realProgress;
+
+        //         // Cancel any previous animation frame and start a new one
+        //         if (animationFrame) cancelAnimationFrame(animationFrame);
+        //         animateProgress();
+        //     },
+        //     (error) => {
+        //         console.error('Upload error:', error);
+        //     },
+        //     () => {
+        //         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        //             console.log("url for uploaded file", downloadURL);
+        //             const fileData = {
+        //                 name: file.name,
+        //                 url: downloadURL,
+        //                 contentType: file.type,
+        //                 icon: getFileIcon(file.type, file.name),
+        //                 // icon:defaultIcon,
+        //                 size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
+        //             };
+
+        //             if (downloadURL) {
+        //                 console.log("uploaded to storage successfully");
+        //                 setUploadedUrl(downloadURL);
+        //                 saveFileMetadata(fileData, path); // Save to Firestore
+        //                 if (onUploadComplete) onUploadComplete();
+        //             } else {
+        //                 console.log("error in storing to storage");
+        //             }
+        //         });
+        //     }
+        // );
     };
 
+    const deleteDocIfFilesEmpty = async (collectionName, docId) => {
+        const docRef = doc(firestore, collectionName, docId);
+        const docSnap = await getDoc(docRef);
+      
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+      
+          if (!data.files || data.files.length === 0) {
+            await deleteDoc(docRef);
+            console.log(`Deleted '${docId}' from '${collectionName}'`);
+          } else {
+            console.log(`Not empty: '${docId}' in '${collectionName}'`);
+          }
+        } else {
+          console.log(`Document '${docId}' not found in '${collectionName}'`);
+        }
+      };
 
     const deleteItem = async (path, file) => {
-        // let foldername = '';
-        // if (folderPath === 'documents') {
-        //     // setFolderName("shared-uploads/documents");
-        //     foldername = 'shared_uploads/documents';
-        // } 
-        // else if (folderPath === 'media') {
-        //         // setFolderName("shared-uploads/media");
-        //         foldername = 'shared_uploads/media';
-        //     }
-        // else if (folderPath === loggedInUserMail) {
-        //         foldername = `user_only_uploads/${loggedInUserMail}`
-        //     }
-        // else{
-        //     console.log("path does not exist ", foldername)
-        //     alert("path does not exist ", foldername)
-        //     return;
-        // } 
         let foldername = '';
         if (path === loggedInUserMail) {
             foldername = `user_only_uploads/${loggedInUserMail}`
@@ -566,7 +698,7 @@ export const FirebaseProvider = (props) => {
             // return getDocument(folderPath)
             //getDocument(folderPath); // ✅ Trigger UI update
         } catch (error) {
-            console.error("Failed to delete item:", error);
+            console.error("Failed to delete item:", error.code);
         }
     };
 
@@ -575,7 +707,7 @@ export const FirebaseProvider = (props) => {
         await deleteItem(folderPath, fileData);
     };
 
-    return <FirebaseContext.Provider value={{ firebaseApp, firestore, signupUser, signInWithGoogle, signinUser,resetPassword, isLoggedIn, loggedInUser, logOut, addUserToStore, getDocument, getDocumentByQuery, uploadFile, deleteFile, uploadedUrl, setUploadedUrl, progress, folders, sharedUploads, getAllSharedUploads }}>
+    return <FirebaseContext.Provider value={{ firebaseApp, firestore, signupUser, signInWithGoogle, signinUser, resetPassword, isLoggedIn, loggedInUser, logOut, addUserToStore, getDocument, getDocumentByQuery, uploadFile, deleteFile, uploadedUrl, setUploadedUrl, progress, folders, sharedUploads, getAllSharedUploads, deleteDocIfFilesEmpty }}>
         {props.children}
     </FirebaseContext.Provider>
 }

@@ -10,18 +10,17 @@ import { UserProvider } from './context/UserContext.jsx';
 
 createRoot(document.getElementById('root')).render(
 
-
+<PopUpContextProvider>
   <FirebaseProvider>
   <UserProvider>
   <UploadContextProvider>
-    <PopUpContextProvider>
+    
       <Router>
         <App />
       </Router>
-    </PopUpContextProvider>
     </UploadContextProvider>
     </UserProvider>
   </FirebaseProvider>
-
+</PopUpContextProvider>
 
 )

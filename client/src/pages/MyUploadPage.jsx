@@ -4,17 +4,14 @@ import Header from '../components/Header';
 import DropzoneUploader from '../components/UploadComponent';
 import { useFirebase } from '../context/Firebase';
 import { usePopUpContext } from '../context/PopUpContext';
-import Loader from '../components/Loader';
-import DataItemBox from '../components/DataItemBox';
 import DeleteCard from '../components/DeletePopUpCard';
 import DataGrid from '../components/DataGrid';
-import Truck from '../components/UploadingPopup';
 import SubHeader from '../components/SubHeader';
 import { useNavigate } from 'react-router-dom';
 
 const MyUploadPage = () => {
     const [myFiles, setMyFiles] = useState(null);
-    
+
     const [openMenuIndex, setOpenMenuIndex] = useState(null);
     const menuRefs = useRef([]);
     const firebase = useFirebase();
@@ -36,14 +33,14 @@ const MyUploadPage = () => {
     }, [firebase, navigate])
 
     useEffect(() => {
-              let timer;
-              if (firebase.uploadedUrl) {
-                timer = setTimeout(() => {
-                  popupContext.setShowSuccessCard(false);
-                }, 1000);
-              }
-              return () => clearTimeout(timer);
-            }, [firebase.uploadedUrl ]);
+        let timer;
+        if (firebase.uploadedUrl) {
+            timer = setTimeout(() => {
+                popupContext.setShowSuccessCard(false);
+            }, 1000);
+        }
+        return () => clearTimeout(timer);
+    }, [firebase.uploadedUrl]);
 
     useEffect(() => {
         if (popupContext.reloadData) {
@@ -77,7 +74,7 @@ const MyUploadPage = () => {
                 <Header />
 
                 <div className="w-full flex flex-col flex-1 items-center text-center bg-gray-100 dark:bg-darkBack">
-                <SubHeader folderName={folderName} />
+                    <SubHeader folderName={folderName} />
                     <DataGrid dataList={myFiles} />
                 </div>
 
@@ -92,19 +89,6 @@ const MyUploadPage = () => {
                         />
                     </div>
                 )}
-
-                {popupContext.showAddNewFolderCard && (
-                    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
-                        <AddNewFolderPopup />
-                        {/* <Form/> */}
-                    </div>
-                )}
-
-                {popupContext.showSuccessCard && (
-                    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
-                         <Truck />
-                     </div>
-                 )}
             </div>
         </div>
 

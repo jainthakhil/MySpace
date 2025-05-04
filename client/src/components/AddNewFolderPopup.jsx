@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { usePopUpContext } from "../context/PopUpContext";
 import { ref } from "firebase/storage";
 import { useFirebase } from '../context/Firebase'
@@ -10,7 +10,6 @@ const AddNewFolderPopup = () => {
 
   const firebase = useFirebase();
   const popupContext = usePopUpContext();
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();

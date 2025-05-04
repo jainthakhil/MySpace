@@ -2,18 +2,15 @@ import { React, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useFirebase, storage } from '../context/Firebase'
 import { usePopUpContext } from '../context/PopUpContext';
-import folderImg from '../assets/folder.png'
-import photoImg from '../assets/photo.png'
 import SidebarComp from '../components/SidebarComp'
 import Loader from '../components/Loader'
 import Header from '../components/Header'
-import DataGrid from '../components/DataGrid'
 import FolderItem from '../components/FolderItem'
 import AddFolderCard from '../components/AddFolderCard'
 import AddNewFolderPopup from '../components/AddNewFolderPopup'
-import BackBtn from '../components/BackBtn';
 import SubHeader from '../components/SubHeader';
 import Truck from '../components/UploadingPopup';
+import SuccessCard from '../components/SucessMessage';
 
 const Home = () => {
   const [folders, setFolders] = useState(null);
@@ -28,8 +25,8 @@ const Home = () => {
 
   const loadFolders = async () => {
     const folderList = await firebase.getAllSharedUploads();
-    // setFolders(folderList);
-    setDataList(folderList)
+    setFolders(folderList);
+    setDataList(folderList);
   }
 
   useEffect(() => {
@@ -51,20 +48,26 @@ const Home = () => {
   }, [popupContext.reloadData])
 
   useEffect(() => {
-          let timer;
-          if (firebase.uploadedUrl) {
-            timer = setTimeout(() => {
-              popupContext.setShowSuccessCard(false);
-            }, 1000);
-          }
-          return () => clearTimeout(timer);
-        }, [firebase.uploadedUrl ]);
+    let timer;
+    if (firebase.uploadedUrl) {
+      timer = setTimeout(() => {
+        popupContext.setShowSuccessCard(false);
+      }, 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [firebase.uploadedUrl]);
 
-  const handleLogout = async () => {
-    await firebase.logOut();
-    localStorage.clear();
-    navigate('/signin')
-  }
+  const [showNoFilesMessage, setShowNoFilesMessage] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (dataList && dataList.length === 0) {
+        setShowNoFilesMessage(true);
+      }
+    }, 5000); // 10 seconds
+
+    return () => clearTimeout(timer);
+  }, [dataList]);
 
   return (
     <div className="parent-cont w-full min-h-screen flex ">
@@ -76,41 +79,49 @@ const Home = () => {
         <BackBtn/>
         <h1 className='md:text-5xl text-lg'> Public Folders</h1>
         </div> */}
-        <SubHeader folderName = "Public Folders" />
+        <SubHeader folderName="Public Folders" />
 
         {/* <Truck /> */}
-        
 
         <div className="w-full h-auto p-4 sm:p-6 md:p-8 lg:p-10">
 
-          {dataList && dataList.length > 0 ? (
-            <div className="w-full grid justify-center md:grid-cols-[repeat(auto-fit,_minmax(150px,200px))] md:gap-6 gap-4 
+          <div className="w-full grid justify-center md:grid-cols-[repeat(auto-fit,_minmax(150px,200px))] md:gap-6 gap-4 
             grid-cols-[repeat(auto-fit,_minmax(120px,120px))] ">
             <AddFolderCard />
-              {dataList.map((folder, index) => (
+            {folders && folders.length > 0 ? (
+              folders.map((folder, index) => (
                 <FolderItem fileData={folder} key={index} />
-              ))}
-              {/* <AddFolderCard /> */}
-            </div>
-          ) : (
-            <Loader />
-          )}
+              ))
+            ) : showNoFilesMessage ? (
+              <p className="text-center text-gray-500 mt-6">No files found.</p>
+            ) : (
+              <Loader />
+            )}
+          </div>
         </div>
 
         {popupContext.showAddNewFolderCard && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
-            <AddNewFolderPopup/>
+            <AddNewFolderPopup />
             {/* <Form/> */}
           </div>
         )}
 
         {popupContext.showSuccessCard && (
-                    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
-                         <Truck />
-                     </div>
-                 )}
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
+            <Truck />
+          </div>
+        )}
 
-       
+        {firebase.uploadedUrl && (
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
+            <SuccessCard />
+          </div>
+        )
+
+        }
+
+
 
       </div>
     </div>

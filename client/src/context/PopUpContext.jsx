@@ -16,8 +16,9 @@ export const PopUpContextProvider = (props)=>{
 
     const [showSuccessCard, setShowSuccessCard] = useState(false);
     const [showForgotPassword, setShowForgotPassword] = useState(false);
+    const [alreadyExist, setAlreadyExist] = useState(false);
 
-    return <PopUpContext.Provider value={{deleteFile, setDeleteFile, showDeleteCard, setShowDeleteCard, deleteLoader, setDeleteLoader, reloadData, setReloadData, showAddNewFolderCard, setShowAddNewFolderCard, newFile, setNewFile, showSuccessCard, setShowSuccessCard,showForgotPassword, setShowForgotPassword}}>
+    return <PopUpContext.Provider value={{deleteFile, setDeleteFile, showDeleteCard, setShowDeleteCard, deleteLoader, setDeleteLoader, reloadData, setReloadData, showAddNewFolderCard, setShowAddNewFolderCard, newFile, setNewFile, showSuccessCard, setShowSuccessCard,showForgotPassword, setShowForgotPassword, alreadyExist, setAlreadyExist}}>
         {props.children}
     </PopUpContext.Provider>
 

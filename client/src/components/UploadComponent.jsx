@@ -12,7 +12,7 @@ const DropzoneUploader = ({ path, onUploadComplete}) => {
 
   const onDrop = useCallback( async(acceptedFiles) => {
     const file = acceptedFiles[0];
-    popupContext.setShowSuccessCard(true);
+    // popupContext.setShowSuccessCard(true);
     if (!file) return;
     
     try{
@@ -76,17 +76,14 @@ const DropzoneUploader = ({ path, onUploadComplete}) => {
         </div>
 
         {/* Progress and Result */}
-        <div className="mt-6 text-center">
+        {/* <div className="mt-6 text-center">
           {firebase.progress > 0 && firebase.progress < 100 && (
             <div className="text-sm text-gray-700 dark:text-green-300">
               Uploading complete {firebase.progress}%
             </div>
           )}
-{/* 
-          {uploadedUrl && (
-           
-          )} */}
-        </div>
+
+        </div> */}
       </div>
     </div>
   );
