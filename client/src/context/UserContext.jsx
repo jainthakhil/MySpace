@@ -5,10 +5,11 @@ const User = createContext(null);
 export const useUser = () => useContext(User);
 
 export const UserProvider = (props) => {
-  const [user, setUser] = useState(null);
+  const [userName, setUserName] = useState('');
+  const [userMail, setUserMail] = useState('');
 
 
-  return <User.Provider value={{ user, setUser }}>
+  return <User.Provider value={{ userName, setUserName,userMail,setUserMail  }}>
     {props.children}
 
   </User.Provider>

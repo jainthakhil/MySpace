@@ -32,7 +32,7 @@ const FolderItem = (fileData, index) => {
 
       <NavLink
         to={url}
-        className=" h-[120px] md:min-w-[150px] md:h-[180px] flex items-center justify-center dark:bg-sidebar bg-white rounded-xl p-2 dark:text-indigo-100 text-gray-600 font-sans hover:scale-102 transition-scale ease-in duration-100   "
+        className="h-[120px] md:min-w-[150px] md:h-[180px] flex items-center justify-center dark:bg-sidebar bg-white rounded-xl p-2 dark:text-indigo-100 text-gray-600 font-sans hover:scale-102 transition-scale ease-in duration-100   "
       >
         {/* 3-dot menu button */}
 

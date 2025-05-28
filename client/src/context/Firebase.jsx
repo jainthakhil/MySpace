@@ -5,6 +5,7 @@ import { getDatabase } from 'firebase/database';
 import { getFirestore, collection, addDoc, setDoc, doc, getDoc, getDocs, updateDoc, arrayUnion, query, where, deleteDoc } from 'firebase/firestore'
 import { getStorage, getDownloadURL, listAll, ref as storageRef, deleteObject, uploadBytesResumable, getMetadata } from 'firebase/storage'
 import { usePopUpContext } from './PopUpContext';
+import { useUser } from './UserContext';
 
 // importing file Icons 
 import googleDocsIcon from '../assets/docx.png'
@@ -17,6 +18,7 @@ import zipIcon from '../assets/zip.png'
 import pngIcon from '../assets/png.png'
 import imageIcon from '../assets/jpg.png'
 import htmlIcon from '../assets/html.png'
+import jsIcon from '../assets/js.png'
 import cssIcon from '../assets/css.png'
 import txtIcon from '../assets/txt.png'
 import folderIcon from '../assets/folder.png'
@@ -49,11 +51,13 @@ export const useFirebase = () => useContext(FirebaseContext);
 export const FirebaseProvider = (props) => {
 
     const [loggedInUser, setLoggedInUser] = useState(null);
+    const [loggedInUserName, setLoggedInUserName] = useState();
     const [uploadedUrl, setUploadedUrl] = useState(null);
     const [progress, setProgress] = useState(0);
     const [folders, setFolders] = useState([]);
     const [sharedUploads, setSharedUploads] = useState(null);
     const popupContext = usePopUpContext();
+    const userContext = useUser();
 
     let loggedInUserMail = JSON.parse(localStorage.getItem('myspace-user'))?.email || " ";
     const isLoggedIn = loggedInUser ? true : false;
@@ -61,8 +65,11 @@ export const FirebaseProvider = (props) => {
     useEffect(() => {
         onAuthStateChanged(firebaseAuth, async (user) => {
             if (user) {
+                console.log(user);
                 localStorage.setItem('myspace-user', JSON.stringify(user));
                 setLoggedInUser(user)
+                userContext.setUserName(user.displayName)
+                userContext.setUserMail(user.email)
                 await getAllSharedUploads();
             }
             else {
@@ -71,7 +78,7 @@ export const FirebaseProvider = (props) => {
             }
             console.log(loggedInUserMail)
         })
-        // console.log(auth);
+        console.log("message from authState");
 
 
     }, [])
@@ -79,18 +86,19 @@ export const FirebaseProvider = (props) => {
     const signupUser = async (email, password, username) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+            userContext.setUserName(username)
             // addUserToStore(username, email);
 
             // 🧠 Set displayName after user is created
-            await updateProfile(userCredential.user, {
+            await updateProfile(userCredential, {
                 displayName: username
             });
             // addUserToStore(username, email);
             createUserProfile(userCredential.user);
-            console.log("User signed up & profile updated:");
+            console.log("User signed up & profile updated:", userCredential.user);
             return userCredential.user
         } catch (error) {
-            console.error("Signup error:", error.message);
+            console.error("Signup error:", error.message); //short password popup
         }
     };
 
@@ -142,9 +150,6 @@ export const FirebaseProvider = (props) => {
 
     const updateProfilePicture = async (file, path) => {
         await saveUser(file);
-
-
-
     }
 
     const logOut = async () => {
@@ -354,12 +359,7 @@ export const FirebaseProvider = (props) => {
             lowerName.includes('.docx')
         ) {
             return googleDocsIcon;
-        } else if (
-            contentType.includes('text') ||
-            lowerName.includes('.txt')
-        ) {
-            return txtIcon;
-        } else if (
+        }else if (
             contentType.includes('video') ||
             lowerName.includes('.mp4')
         ) {
@@ -384,14 +384,26 @@ export const FirebaseProvider = (props) => {
         ) {
             return imageIcon; // you can name this jpgIcon if you prefer
         } else if (
+            contentType.includes('html') ||
             lowerName.includes('.html')
         ) {
             return htmlIcon;
         } else if (
+            contentType.includes('css') ||
             lowerName.includes('.css')
         ) {
             return cssIcon;
-        } else {
+        }else if (
+            contentType.includes('js') ||
+            lowerName.includes('.js')
+        ) {
+            return jsIcon;
+        } else if (
+            contentType.includes('text') ||
+            lowerName.includes('.txt')
+        ) {
+            return txtIcon;
+        }  else {
             return defaultIcon; // fallback icon
         }
     };

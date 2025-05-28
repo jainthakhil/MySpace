@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import AccountDropdown from './AccountDropdown'
 import LogoutBtn from './LogoutBtn';
-
-
+import { useFirebase } from '../context/Firebase';
+import { useUser } from '../context/UserContext';
 
 const Header = () => {
+  const firebase = useFirebase();
+  const userContext = useUser();
+  const [userName, setUserName] = useState("User");
   const storedUser = JSON.parse(localStorage.getItem('myspace-user'));
   const username = storedUser?.displayName || "username";
-
+  const name = firebase.loggedInUserName;
+    // const username = "username";
+   
   const [dateTime, setDateTime] = useState({
     day: '',
     date: '',
@@ -16,6 +21,8 @@ const Header = () => {
   });
 
   useEffect(() => {
+    console.log(userContext)
+    // setUserName(firebase.loggedInUser.displayName || "user");
     const interval = setInterval(() => {
       const now = new Date();
       setDateTime({
@@ -31,15 +38,15 @@ const Header = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [firebase.loggedInUserName]);
 
  
   return (
-    <div className="w-full flex p-2 bg-darkBack">
+    <div className="w-full flex p-2 bg:white dark:bg-darkBack">
 
      <div className=' bg-white dark:bg-sidebar w-full flex items-center justify-between mb-5 border-1 rounded-md border-gray-600 mx-auto' >
       <div className="flex px-3 md:px-6">
-        <h1 className=' text-[12px] md:text-sm'>Welcome back, <span className=' text-sm md:text-lg font-bold text-iceBlue'>{username}</span> </h1>
+        <h1 className=' text-[12px] md:text-sm'>Welcome back, <span className=' text-sm md:text-lg font-bold text-iceBlue'>{ userContext.userName}</span> </h1>
       </div>
       <div className='flex items-center'>
         <div className=" hidden md:block date text-[12px]">
