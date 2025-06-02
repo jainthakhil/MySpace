@@ -25,7 +25,7 @@ const AddNewFolderPopup = () => {
 
     try {
       await firebase.uploadFile(file, cleanFolderName)
-      popupContext.setShowSuccessCard(true);
+      // popupContext.setShowSuccessCard(true);
       // const fileRef = ref(storage, `${fileName}/${file.name}`);
       // await uploadBytes(fileRef, file);
       // alert(`File uploaded to folder "${folderName}"`);

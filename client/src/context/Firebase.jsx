@@ -98,7 +98,15 @@ export const FirebaseProvider = (props) => {
             console.log("User signed up & profile updated:", userCredential.user);
             return userCredential.user
         } catch (error) {
-            console.error("Signup error:", error.message); //short password popup
+            if (error.code === "auth/email-already-in-use"){
+                popupContext.setAccountAlreadyExist(true);
+            }
+                // console.log("right error ", error.code)
+            else {
+                console.log(error);
+                return;
+            }
+            // console.error("Signup error:", error.code); //short password popup
         }
     };
 
@@ -111,9 +119,14 @@ export const FirebaseProvider = (props) => {
             .then((userCredential) => {
                 const user = userCredential.user;
                 setLoggedInUser(user);
+                // alert("User Logged In Successfully");
+                popupContext.setShowSuccessCard(true)
             })
             .catch((error) => {
                 console.log(error);
+                // alert("User Credentials are wrong, please try again");
+                popupContext.setShowErrorCard(true);
+
             });
     }
 
@@ -359,7 +372,7 @@ export const FirebaseProvider = (props) => {
             lowerName.includes('.docx')
         ) {
             return googleDocsIcon;
-        }else if (
+        } else if (
             contentType.includes('video') ||
             lowerName.includes('.mp4')
         ) {
@@ -393,7 +406,7 @@ export const FirebaseProvider = (props) => {
             lowerName.includes('.css')
         ) {
             return cssIcon;
-        }else if (
+        } else if (
             contentType.includes('js') ||
             lowerName.includes('.js')
         ) {
@@ -403,7 +416,7 @@ export const FirebaseProvider = (props) => {
             lowerName.includes('.txt')
         ) {
             return txtIcon;
-        }  else {
+        } else {
             return defaultIcon; // fallback icon
         }
     };
@@ -568,8 +581,8 @@ export const FirebaseProvider = (props) => {
             // If error is 'object-not-found', proceed to upload
         }
 
-        popupContext.setShowSuccessCard(true);
-    
+        // popupContext.setShowSuccessCard(true);
+
         const uploadTask = uploadBytesResumable(dataRef, file);
         console.log(foldername);
 
@@ -593,6 +606,7 @@ export const FirebaseProvider = (props) => {
 
                 if (animationFrame) cancelAnimationFrame(animationFrame);
                 animateProgress();
+                popupContext.setShowUploadingCard(true);
             },
             (error) => {
                 console.error('Upload error:', error);
@@ -610,7 +624,9 @@ export const FirebaseProvider = (props) => {
                     };
 
                     if (downloadURL) {
-                        console.log("Uploaded to storage successfully");
+                        console.log("Uploaded to storage successfully"); //ONLY SUCCESSCARD
+                        popupContext.setShowSuccessCard(true);
+                        popupContext.setShowUploadingCard(false);
                         setUploadedUrl(downloadURL);
                         saveFileMetadata(fileData, path);
                         if (onUploadComplete) onUploadComplete();
@@ -620,77 +636,26 @@ export const FirebaseProvider = (props) => {
                 });
             }
         )
-        // popupContext.setShowSuccessCard(true);
-        // const uploadTask = uploadBytesResumable(dataRef, file);
-        // console.log(foldername);
-
-        // let animationFrame = null;
-        // let displayedProgress = 0;
-        // let targetProgress = 0;
-
-        // const animateProgress = () => {
-        //     if (displayedProgress < targetProgress) {
-        //         displayedProgress += 1;
-        //         setProgress(displayedProgress);
-        //         animationFrame = requestAnimationFrame(animateProgress);
-        //     }
-        // };
-
-        // uploadTask.on(
-        //     'state_changed',
-        //     (snapshot) => {
-        //         const realProgress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        //         targetProgress = realProgress;
-
-        //         // Cancel any previous animation frame and start a new one
-        //         if (animationFrame) cancelAnimationFrame(animationFrame);
-        //         animateProgress();
-        //     },
-        //     (error) => {
-        //         console.error('Upload error:', error);
-        //     },
-        //     () => {
-        //         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        //             console.log("url for uploaded file", downloadURL);
-        //             const fileData = {
-        //                 name: file.name,
-        //                 url: downloadURL,
-        //                 contentType: file.type,
-        //                 icon: getFileIcon(file.type, file.name),
-        //                 // icon:defaultIcon,
-        //                 size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
-        //             };
-
-        //             if (downloadURL) {
-        //                 console.log("uploaded to storage successfully");
-        //                 setUploadedUrl(downloadURL);
-        //                 saveFileMetadata(fileData, path); // Save to Firestore
-        //                 if (onUploadComplete) onUploadComplete();
-        //             } else {
-        //                 console.log("error in storing to storage");
-        //             }
-        //         });
-        //     }
-        // );
+       
     };
 
     const deleteDocIfFilesEmpty = async (collectionName, docId) => {
         const docRef = doc(firestore, collectionName, docId);
         const docSnap = await getDoc(docRef);
-      
+
         if (docSnap.exists()) {
-          const data = docSnap.data();
-      
-          if (!data.files || data.files.length === 0) {
-            await deleteDoc(docRef);
-            console.log(`Deleted '${docId}' from '${collectionName}'`);
-          } else {
-            console.log(`Not empty: '${docId}' in '${collectionName}'`);
-          }
+            const data = docSnap.data();
+
+            if (!data.files || data.files.length === 0) {
+                await deleteDoc(docRef);
+                console.log(`Deleted '${docId}' from '${collectionName}'`);
+            } else {
+                console.log(`Not empty: '${docId}' in '${collectionName}'`);
+            }
         } else {
-          console.log(`Document '${docId}' not found in '${collectionName}'`);
+            console.log(`Document '${docId}' not found in '${collectionName}'`);
         }
-      };
+    };
 
     const deleteItem = async (path, file) => {
         let foldername = '';

@@ -45,7 +45,7 @@ const Truck = () => {
         </div>
         {firebase.progress > 0 && firebase.progress < 100 && (
             <div className="text-sm text-green-700 font-bold dark:text-green-300 pt-4">
-               {firebase.progress}% completed
+               {firebase.progress || 0}% completed
             </div>
           )}
       </div>

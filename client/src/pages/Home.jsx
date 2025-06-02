@@ -107,7 +107,7 @@ const Home = () => {
           </div>
         )}
 
-        {popupContext.showSuccessCard && (
+        {/* {popupContext.showSuccessCard && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
             <Truck />
           </div>
@@ -119,7 +119,7 @@ const Home = () => {
           </div>
         )
 
-        }
+        } */}
 
 
 

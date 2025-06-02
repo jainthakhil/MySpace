@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React ,{useState}from 'react';
 import styled from 'styled-components';
-import { useFirebase } from '../context/Firebase';
+import { usePopUpContext } from '../context/PopUpContext';
 
-const SuccessCard = (prop) => {
-    const firebase = useFirebase();
+const ErrorCard = () => {
+    const popupContext = usePopUpContext();
     const [cross, setCross] = useState(false);
-
     const handleCross = () => {
-        firebase.setUploadedUrl('');
+        popupContext.setShowErrorCard(false);
         setCross(prev => !prev);
 
     }
@@ -19,12 +18,12 @@ const SuccessCard = (prop) => {
         </svg>
         <div className="icon-container">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" strokeWidth={0} fill="currentColor" stroke="currentColor" className="icon">
-            <path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z" />
+            <path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z" />
           </svg>
         </div>
         <div className="message-text-container">
-          <p className="message-text">Success message</p>
-          <p className="sub-text">{prop.message ||"Uploaded Successfully!"}</p>
+          <p className="message-text">Error message</p>
+          <p className="sub-text">User credentails are wrong, <br />Please try again</p>
         </div>
 
         <span>
@@ -61,7 +60,7 @@ const StyledWrapper = styled.div`
     left: -31px;
     top: 32px;
     width: 80px;
-    fill: #04e4003a;
+    fill: #fc0c0c3a;
   }
   .icon-container {
     width: 35px;
@@ -69,14 +68,14 @@ const StyledWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #04e40048;
+    background-color: #fc0c0c48;
     border-radius: 50%;
     margin-left: 8px;
   }
   .icon {
     width: 17px;
     height: 17px;
-    color: #269b24;
+    color: #d10d0d;
   }
   .message-text-container {
     display: flex;
@@ -91,7 +90,7 @@ const StyledWrapper = styled.div`
     cursor: default;
   }
   .message-text {
-    color: #269b24;
+    color: #d10d0d;
     font-size: 17px;
     font-weight: 700;
   }
@@ -106,4 +105,4 @@ const StyledWrapper = styled.div`
     cursor: pointer;
   }`;
 
-export default SuccessCard;
+export default ErrorCard;

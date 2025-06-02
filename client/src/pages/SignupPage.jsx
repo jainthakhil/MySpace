@@ -32,12 +32,18 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData)
-    const result = await firebase.signupUser(formData.email, formData.password, formData.username); 
+    const result = await firebase.signupUser(formData.email, formData.password, formData.username);
 
-    // firebase.writeUserData(formData)
-
-    // firebase.putData(`users/${formData.username}`,{username:formData.username,email:formData.email, password:formData.password});
-    console.log("signUp successfull" ,result);
+    if(result){
+          console.log("signUp successfull" ,result);
+    }
+    else{
+      setFormData({
+      email: '',
+      password: '',
+      username: ''
+    });
+    }
   };
 
   return (

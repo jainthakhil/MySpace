@@ -18,22 +18,41 @@ import { usePopUpContext } from './context/PopUpContext.jsx';
 import AlreadyExistPopup from './components/FileExistedPopup.jsx';
 import UploadingPopup from './components/UploadingPopup';
 import SuccessCard from './components/SucessMessage.jsx';
+import ErrorCard from './components/ErrorMessage.jsx';
 import { useFirebase } from './context/Firebase.jsx';
+import AccAlreadyExistPopup from './components/AccountAlreadyExistPopup.jsx';
 
 function App() {
   const popupContext = usePopUpContext();
   const firebase = useFirebase()
   const uploadedUrl = firebase.uploadedUrl;
+  const showSuccess = popupContext.showSuccessCard;
 
   useEffect(() => {
-    let timer;
+    let uploadTimer;
+
     if (uploadedUrl) {
-      timer = setTimeout(() => {
+      uploadTimer = setTimeout(() => {
         firebase.setUploadedUrl('');
       }, 4000);
     }
-    return () => clearTimeout(timer);
-  }, [uploadedUrl ]);
+
+    return () => clearTimeout(uploadTimer);
+  }, [uploadedUrl]);
+
+  useEffect(() => {
+    let successLoginTimer;
+
+    if (showSuccess) {
+      successLoginTimer = setTimeout(() => {
+        popupContext.setShowSuccessCard(false);
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(successLoginTimer);
+    };
+  }, [showSuccess]); // 👈 Watch this, not uploadedUrl
 
   return (
     <div className="App min-h-screen  bg-white dark:bg-darkBack font-cairo">
@@ -52,25 +71,56 @@ function App() {
         </Routes>
       </Suspense>
 
+
+      {/* for success login */}
+      {popupContext.showSuccessCard && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
+          <SuccessCard
+            message="User LoggedIn Successfully"
+          />
+        </div>
+      )}
+
+      {/* for failed Login  */}
+      {popupContext.showErrorCard && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
+          <ErrorCard />
+        </div>
+      )}
+
+      {/* account already popup  */}
+      {popupContext.accountAlreadyExist && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
+          <AccAlreadyExistPopup />
+        </div>
+      )}
+
+
+      {/* for uloading animation  */}
+      {popupContext.showUploadingCard && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
+          <UploadingPopup />
+        </div>
+      )}
+
+      {/* for succedd upload  */}
+      {firebase.uploadedUrl && !popupContext.showUploadingCard && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
+          <SuccessCard
+            message="file uploaded successfully"
+          />
+        </div>
+      )
+
+      }
+
+      {/* for already exist  */}
       {(popupContext.alreadyExist && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
           <AlreadyExistPopup />
         </div>
       ))}
 
-      {popupContext.showSuccessCard && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
-          <UploadingPopup />
-        </div>
-      )}
-
-       {firebase.uploadedUrl && !popupContext.showSuccessCard && (
-                    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
-                        <SuccessCard />
-                    </div>
-                )
-
-                }
 
 
     </div>
