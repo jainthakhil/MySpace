@@ -47,16 +47,16 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gray-900 flex flex-col md:flex-row  justify-evenly items-center text-white">
-    <h1 className='text-2xl sm:text-5xl sm:m-10 text-center'>SignUp <br/> <span className='block mx-auto text-center'>on</span>MySpace</h1>
+    <div className="min-h-screen w-full bg-gray-200 dark:bg-gray-800 flex flex-col md:flex-row  justify-evenly items-center text-white">
+    <h1 className='text-2xl sm:text-5xl sm:m-10 text-center text-black dark:text-white'>SignUp <br/> <span className='block mx-auto text-center'>on</span>MySpace</h1>
 
-      <div className=" w-3/4 md:w-full max-w-md bg-gray-800 p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center text-white mb-6">Create Account</h2>
+      <div className=" w-3/4 md:w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg  text-black dark:text-white">
+        <h2 className="text-2xl font-bold text-center mb-6">Create Account</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 text-black dark:text-gray-100">
           {/* Username Input */}
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-300">Username</label>
+            <label htmlFor="username" className="block text-sm font-medium dark:text-gray-300 text-gray-800">Username</label>
             <input
               type="text"
               id="username"
@@ -64,13 +64,13 @@ const SignUpPage = () => {
               value={formData.username}
               onChange={handleChange}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-4 py-2 border border-gray-600 rounded-lg dark:bg-gray-700 bg:white text-white focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
 
           {/* Email Input */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-300">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium dark:text-gray-300 text-gray-800">Email</label>
             <input
               type="email"
               id="email"
@@ -78,13 +78,13 @@ const SignUpPage = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-4 py-2 border border-gray-600 rounded-lg dark:bg-gray-700 text-white focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
 
           {/* Password Input */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium dark:text-gray-300 text-gray-800">Password</label>
             <input
               type="password"
               id="password"
@@ -92,7 +92,7 @@ const SignUpPage = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-4 py-2 border border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-gray-800 focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
 
