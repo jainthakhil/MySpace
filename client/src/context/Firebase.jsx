@@ -8,21 +8,21 @@ import { usePopUpContext } from './PopUpContext';
 import { useUser } from './UserContext';
 
 // importing file Icons 
-import googleDocsIcon from '../assets/docx.png'
-import sheetsIcon from '../assets/xlsx.png'
+import googleDocsIcon from '/images/docx.png'
+import sheetsIcon from '/images/xlsx.png'
 import pdfIcon from '/images/ppdf.png'
-import pptIcon from '../assets/pptx.png'
-import mp3Icon from '../assets/mp3.png'
-import mp4Icon from '../assets/mp4.png'
-import zipIcon from '../assets/zip.png'
+import pptIcon from '/images/pptx.png'
+import mp3Icon from '/images/mp3.png'
+import mp4Icon from '/images/mp4.png'
+import zipIcon from '/images/zip.png'
 import pngIcon from '/images/png.png'
-import imageIcon from '../assets/jpg.png'
-import htmlIcon from '../assets/html.png'
-import jsIcon from '../assets/js.png'
-import cssIcon from '../assets/css.png'
-import txtIcon from '../assets/txt.png'
-import folderIcon from '../assets/folder.png'
-import defaultIcon from '../assets/defaultIcon.png'
+import imageIcon from '/images/jpg.png'
+import htmlIcon from '/images/html.png'
+import jsIcon from '/images/js.png'
+import cssIcon from '/images/css.png'
+import txtIcon from '/images/txt.png'
+import folderIcon from '/images/folder.png'
+import defaultIcon from '/images/defaultIcon.png'
 
 
 const firebaseConfig = {
