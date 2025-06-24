@@ -21,7 +21,7 @@ const Header = () => {
   });
 
   useEffect(() => {
-    console.log(userContext)
+    // console.log(userContext)
     // setUserName(firebase.loggedInUser.displayName || "user");
     const interval = setInterval(() => {
       const now = new Date();

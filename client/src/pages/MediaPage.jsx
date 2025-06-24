@@ -2,9 +2,7 @@ import { React, useEffect, useState, useRef } from 'react'
 import { useFirebase } from '../context/Firebase'
 import { usePopUpContext } from '../context/PopUpContext';
 import SidebarComp from '../components/SidebarComp';
-import DataItemBox from '../components/DataItemBox';
 import DropzoneUploader from '../components/UploadComponent';
-import Loader from '../components/Loader';
 import DeleteCard from '../components/DeletePopUpCard';
 import Header from '../components/Header';
 import DataGrid from '../components/DataGrid';
@@ -20,31 +18,20 @@ const MediaPage = () => {
     const loadFiles = async () => {
         const data = await firebase.getDocument('media');
         setMediaDataList(data);
-        
-        // const cached = sessionStorage.getItem('mediaFiles');
-        // if (cached) {
-        //     setMediaDataList(JSON.parse(cached));
-        // } else {
-        //     const data = await firebase.fetchFiles('media/');
-        //     setMediaDataList(data);
-        //     sessionStorage.setItem('mediaFiles', JSON.stringify(data));
-        // }
     };
 
     useEffect(() => {
         loadFiles()
         console.log("firebase is altered and loadFiles is fired")
-        // if(mediaDataList) console.log(mediaDataList)
     }, [firebase])
 
-    useEffect(()=>{
-            if(popupContext.reloadData){
-                loadFiles();
-                popupContext.setReloadData(false);
-            }
-            // console.log(popupContext)
-    
-        }, [popupContext.reloadData])
+    useEffect(() => {
+        if (popupContext.reloadData) {
+            loadFiles();
+            popupContext.setReloadData(false);
+        }
+
+    }, [popupContext.reloadData])
 
 
     useEffect(() => {
@@ -68,39 +55,11 @@ const MediaPage = () => {
 
             <div className='w-full min-h-screen flex flex-col items-center justify-evenly text-black dark:text-white  '>
             <Header/>
-                {/* <DropzoneUploader path={folderPath} onUploadComplete={handleUploadComplete} /> */}
 
                 <div className="w-full flex flex-col flex-1 items-center text-center bg-gray-100 dark:bg-gray-800">
                     <h1 className='text-3xl dark:text-white text-black'>Media files</h1>
 
-                    {/* <div className="w-full h-auto p-4 sm:p-6 md:p-8 lg:p-10"> */}
-                    {/* className="w-full h-auto flex items-center justify-center p-10" */
-                    /* "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8 justify-items-stretch " */
-                    }
-                    {/* className="grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-6 mt-8 " */}
-
-{/* //do changes */}
-                        {/* {mediaDataList && mediaDataList.length > 0 ? (
-                            <div className="grid grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] gap-6 mt-8 " >
-                                {mediaDataList.map((file, index) => (
-                                    <DataItemBox
-                                        key={index}
-                                        index={index}
-                                        file={file}
-                                        // folderPath={folderPath}
-                                        isMenuOpen={openMenuIndex === index}
-                                        onToggleMenu={() =>
-                                            setOpenMenuIndex(openMenuIndex === index ? null : index)
-                                        }
-                                        menuRef={(el) => (menuRefs.current[index] = el)}
-                                        localStorageName="mediaFiles"
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            <Loader />
-                        )}
-                    </div> */}
+                  
                     <DataGrid dataList = {mediaDataList}
                     folderPath = {folderPath} />
                 </div>

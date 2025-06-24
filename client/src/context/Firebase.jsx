@@ -65,7 +65,7 @@ export const FirebaseProvider = (props) => {
     useEffect(() => {
         onAuthStateChanged(firebaseAuth, async (user) => {
             if (user) {
-                console.log(user);
+                // console.log(user);
                 localStorage.setItem('myspace-user', JSON.stringify(user));
                 setLoggedInUser(user)
                 userContext.setUserName(user.displayName)
@@ -76,9 +76,9 @@ export const FirebaseProvider = (props) => {
                 setLoggedInUser(null)
                 localStorage.clear();
             }
-            console.log(loggedInUserMail)
+            // console.log(loggedInUserMail)
         })
-        console.log("message from authState");
+        // console.log("message from authState");
 
 
     }, [])
@@ -95,7 +95,7 @@ export const FirebaseProvider = (props) => {
             });
             // addUserToStore(username, email);
             createUserProfile(userCredential.user);
-            console.log("User signed up & profile updated:", userCredential.user);
+            // console.log("User signed up & profile updated:", userCredential.user);
             return userCredential.user
         } catch (error) {
             if (error.code === "auth/email-already-in-use"){
@@ -103,7 +103,7 @@ export const FirebaseProvider = (props) => {
             }
                 // console.log("right error ", error.code)
             else {
-                console.log(error);
+                // console.log(error);
                 return;
             }
             // console.error("Signup error:", error.code); //short password popup
@@ -123,7 +123,7 @@ export const FirebaseProvider = (props) => {
                 popupContext.setShowSuccessCard(true)
             })
             .catch((error) => {
-                console.log(error);
+                // console.log(error);
                 // alert("User Credentials are wrong, please try again");
                 popupContext.setShowErrorCard(true);
 
@@ -133,13 +133,13 @@ export const FirebaseProvider = (props) => {
     const resetPassword = async (email) => {
         return sendPasswordResetEmail(auth, email)
             .then(() => {
-                console.log("password reset mail sent successfuly")
+                // console.log("password reset mail sent successfuly")
                 alert("password reset mail sent successfuly")
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(error);
+                // console.log(error);
 
                 // ..
             });
@@ -157,7 +157,8 @@ export const FirebaseProvider = (props) => {
 
             console.log("Profile picture updated successfully!");
         } catch (error) {
-            console.log("Error updating profile picture: ", error);
+            // console.log("Error updating profile picture: ", error);
+            console.error(error)
         }
     }
 
@@ -182,9 +183,9 @@ export const FirebaseProvider = (props) => {
                 photoURL: user.photoURL || "",
             });
 
-            console.log("User profile created successfully!");
+            // console.log("User profile created successfully!");
         } catch (error) {
-            console.error("Error creating user profile: ", error);
+            console.error(error);
         }
     };
 
@@ -193,18 +194,12 @@ export const FirebaseProvider = (props) => {
             name: userName,
             email: userEmail
         });
-        console.log("new user data uploaded");
+        // console.log("new user data uploaded");
     }
 
     const getDocument = async (folderPath) => {
         let collectionname;
-        // if (folderPath === "media") {
-        //     collectionname = "shared_uploads";
-        // } else if (folderPath === "documents") {
-        //     collectionname = "shared_uploads";
-        // } else {
-        //     collectionname = "user_only_uploads";
-        // }
+       
         if (folderPath === loggedInUserMail) {
             collectionname = "user_only_uploads";
         }
@@ -218,7 +213,7 @@ export const FirebaseProvider = (props) => {
             if (docSnap.exists()) {
                 return docSnap.data().files || []; // return just the files array
             } else {
-                console.log("No such document!");
+                // console.log("No such document!");
                 return [];
             }
         } catch (error) {
@@ -250,7 +245,7 @@ export const FirebaseProvider = (props) => {
     };
 
     const saveFileMetadata = async (fileData, folderPath) => {
-        console.log(folderPath);
+        // console.log(folderPath);
         let collectionname;
         if (folderPath === loggedInUserMail) {
             collectionname = "user_only_uploads";
@@ -274,38 +269,6 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.error("Error saving file metadata:", error);
         }
-
-        // try{
-        //     const collRef = collection(firestore, "uploads", "shared", folderPath);
-        //     await addDoc(collRef, fileData );
-
-        // }
-        // catch (error) {
-        //     console.log(`Error uploading to shared/${folderPath}:`, error)
-
-        // }
-
-
-        // const docRef = doc(firestore, "uploads", "shared", type); // here `type` is a document
-
-        // try {
-        //     const docSnap = await getDoc(docRef);
-
-        //     if (docSnap.exists()) {
-        //         await updateDoc(docRef, {
-        //             files: arrayUnion(fileData),
-        //         });
-        //     } else {
-        //         await setDoc(docRef, {
-        //             files: [fileData],
-        //         });
-        //     }
-
-        //     console.log(`Saved to uploads/shared/${type}`);
-        // } catch (error) {
-        //     console.error("Error saving file metadata:", error);
-        // }
-
     };
 
     const deleteFileMetadata = async (folderPath, fileUrl) => {
@@ -331,7 +294,7 @@ export const FirebaseProvider = (props) => {
                     files: updatedFiles,
                 });
 
-                console.log("File metadata deleted successfully.");
+                // console.log("File metadata deleted successfully.");
             } else {
                 console.log("Document does not exist.");
             }
@@ -344,7 +307,7 @@ export const FirebaseProvider = (props) => {
         const collectionRef = collection(firestore, 'users');
         const q = query(collectionRef, where('Name', '==', name))
         const snap = await getDocs(q);
-        snap.forEach((data) => console.log(data.data()));
+        // snap.forEach((data) => console.log(data.data()));
     }
 
     const getFileIcon = (contentType, name) => {
@@ -421,144 +384,7 @@ export const FirebaseProvider = (props) => {
         }
     };
 
-    // useEffect(() => {
-    //     const fetchFolders = async () => {
-    //         const rootRef = storageRef(storage, "shared_uploads"); // root path
-    //         const result = await listAll(rootRef)
-    //         const folderNames = result.prefixes.map((folderRef) => folderRef.name);
-    //         setFolders(folderNames);
-    //     };
-
-    //     fetchFolders();
-    // }, []);
-
-    // const uploadFile = (file, path, onUploadComplete) => {
-
-    //     let foldername = '';
-    //     if(path === loggedInUserMail){
-    //          foldername = `user_only_uploads/${loggedInUserMail}`
-    //     }
-    //     else{
-    //         foldername =  `shared_uploads/${path}`
-    //     }
-
-    //     const dataRef = storageRef(storage, `${foldername}/${file.name}`);
-    //     const uploadTask = uploadBytesResumable(dataRef, file);
-    //     console.log(foldername);
-    //     let animationFrame;
-    //     let displayedProgress = 0;
-
-
-    //     uploadTask.on(
-    //         'state_changed',
-    //         (snapshot) => {
-    //             const realProgress = Math.round( (snapshot.bytesTransferred / snapshot.totalBytes) * 100)
-
-    //             const animateProgress = () => {
-    //                 if (displayedProgress < realProgress) {
-    //                   displayedProgress += 1; // step up by 1%
-    //                   setProgress(displayedProgress);
-    //                   animationFrame = requestAnimationFrame(animateProgress);
-    //                 }
-    //               };
-
-    //               cancelAnimationFrame(animationFrame);
-    //               animateProgress();
-
-    //             // const percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //             // if (percent) {
-    //             //     setProgress(Math.round(percent));
-    //             // }
-    //         },
-    //         (error) => {
-    //             console.error('Upload error:', error);
-    //         },
-    //         // ✅ This is the "on complete" callback
-    //         () => {
-    //             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    //                 const fileData = {
-    //                     name: file.name,
-    //                     url: downloadURL,
-    //                     contentType: file.type,
-    //                     icon: getFileIcon(file.type, file.name),
-    //                     size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
-    //                     // uploadedAt: new Date().toISOString(),
-    //                 };
-    //                 if (downloadURL) console.log("uploaded to storage successfully")
-    //                 else {
-    //                     console.log("error in storing to store")
-    //                 }
-    //                 setUploadedUrl(downloadURL)
-
-    //                 saveFileMetadata(fileData, path); // ✅ Save to Firestore
-
-    //                 if (onUploadComplete) onUploadComplete();
-    //             });
-    //         }
-    //     );
-    // };
-
-    // const uploadFile = async (file, path, onUploadComplete) => {
-    //     let foldername = path === loggedInUserMail
-    //         ? `user_only_uploads/${loggedInUserMail}`
-    //         : `shared_uploads/${path}`;
-
-    //     const dataRef = storageRef(storage, `${foldername}/${file.name}`);
-
-    //             popupContext.setShowSuccessCard(true);
-    //             const uploadTask = uploadBytesResumable(dataRef, file);
-    //             console.log(foldername);
-
-    //             let animationFrame = null;
-    //             let displayedProgress = 0;
-    //             let targetProgress = 0;
-
-    //             const animateProgress = () => {
-    //                 if (displayedProgress < targetProgress) {
-    //                     displayedProgress += 1;
-    //                     setProgress(displayedProgress);
-    //                     animationFrame = requestAnimationFrame(animateProgress);
-    //                 }
-    //             };
-
-    //             uploadTask.on(
-    //                 'state_changed',
-    //                 (snapshot) => {
-    //                     const realProgress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-    //                     targetProgress = realProgress;
-
-    //                     // Cancel any previous animation frame and start a new one
-    //                     if (animationFrame) cancelAnimationFrame(animationFrame);
-    //                     animateProgress();
-    //                 },
-    //                 (error) => {
-    //                     console.error('Upload error:', error);
-    //                 },
-    //                 () => {
-    //                     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    //                         console.log("url for uploaded file", downloadURL);
-    //                         const fileData = {
-    //                             name: file.name,
-    //                             url: downloadURL,
-    //                             contentType: file.type,
-    //                             icon: getFileIcon(file.type, file.name),
-    //                             // icon:defaultIcon,
-    //                             size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
-    //                         };
-
-    //                         if (downloadURL) {
-    //                             console.log("uploaded to storage successfully");
-    //                             setUploadedUrl(downloadURL);
-    //                             saveFileMetadata(fileData, path); // Save to Firestore
-    //                             if (onUploadComplete) onUploadComplete();
-    //                         } else {
-    //                             console.log("error in storing to storage");
-    //                         }
-    //                     });
-    //                 }
-    //             );
-    //     }
-    // };
+    
 
     const uploadFile = async (file, path, onUploadComplete) => {
         let foldername = path === loggedInUserMail
@@ -578,13 +404,11 @@ export const FirebaseProvider = (props) => {
                 console.error("Unexpected error while checking metadata:", error.message);
                 return;
             }
-            // If error is 'object-not-found', proceed to upload
         }
 
-        // popupContext.setShowSuccessCard(true);
 
         const uploadTask = uploadBytesResumable(dataRef, file);
-        console.log(foldername);
+        // console.log(foldername);
 
         let animationFrame = null;
         let displayedProgress = 0;
@@ -613,7 +437,7 @@ export const FirebaseProvider = (props) => {
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    console.log("URL for uploaded file:", downloadURL);
+                    // console.log("URL for uploaded file:", downloadURL);
 
                     const fileData = {
                         name: file.name,
@@ -624,7 +448,7 @@ export const FirebaseProvider = (props) => {
                     };
 
                     if (downloadURL) {
-                        console.log("Uploaded to storage successfully"); //ONLY SUCCESSCARD
+                        // console.log("Uploaded to storage successfully"); //ONLY SUCCESSCARD
                         popupContext.setShowSuccessCard(true);
                         popupContext.setShowUploadingCard(false);
                         setUploadedUrl(downloadURL);
@@ -648,12 +472,12 @@ export const FirebaseProvider = (props) => {
 
             if (!data.files || data.files.length === 0) {
                 await deleteDoc(docRef);
-                console.log(`Deleted '${docId}' from '${collectionName}'`);
+                // console.log(`Deleted '${docId}' from '${collectionName}'`);
             } else {
-                console.log(`Not empty: '${docId}' in '${collectionName}'`);
+                // console.log(`Not empty: '${docId}' in '${collectionName}'`);
             }
         } else {
-            console.log(`Document '${docId}' not found in '${collectionName}'`);
+            console.error(`Document '${docId}' not found in '${collectionName}'`);
         }
     };
 
@@ -668,19 +492,14 @@ export const FirebaseProvider = (props) => {
         const fileRef = storageRef(storage, `${foldername}/${file.name}`);
         try {
             await deleteObject(fileRef);
-            //   setStateToggle(prev => !prev);
             deleteFileMetadata(path, file.url)
-            console.log("Item deleted successfully");
-            // sessionStorage.removeItem(localStorageName);
-            // return getDocument(folderPath)
-            //getDocument(folderPath); // ✅ Trigger UI update
+           
         } catch (error) {
             console.error("Failed to delete item:", error.code);
         }
     };
 
     const deleteFile = async (folderPath, fileData) => {
-        console.log(fileData)
         await deleteItem(folderPath, fileData);
     };
 

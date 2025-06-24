@@ -47,7 +47,6 @@ const MyUploadPage = () => {
             loadFiles();
             popupContext.setReloadData(false);
         }
-        // console.log(popupContext)
 
     }, [popupContext.reloadData])
 

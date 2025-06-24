@@ -3,13 +3,8 @@ import { useFirebase } from '../context/Firebase'
 import { usePopUpContext } from '../context/PopUpContext';
 import SidebarComp from '../components/SidebarComp'
 import DropzoneUploader from '../components/UploadComponent';
-import DataItemBox from '../components/DataItemBox';
-
-import Loader from '../components/Loader';
 import DeleteCard from '../components/DeletePopUpCard';
-import DeleteLoader from '../components/DeleteLoader';
 import Header from '../components/Header';
-import AccountDropdown from '../components/AccountDropdown';
 import DataGrid from '../components/DataGrid';
 
 const DocumentsPage = () => {
@@ -58,34 +53,11 @@ const DocumentsPage = () => {
             <SidebarComp />
             <div className='w-full min-h-screen flex flex-col items-center justify-evenly text-black dark:text-white'>
             <Header/>
-            {/* <AccountDropdown/> */}
-                {/* <DropzoneUploader path={folderPath} onUploadComplete={handleUploadComplete} /> */}
+          
                 <div className="w-full flex flex-col flex-1 items-center text-center bg-gray-100 dark:bg-gray-800">
                     <h1 className='text-3xl'>Document Files</h1>
 
-                    {/* <div className="w-full h-auto p-4 sm:p-6 md:p-8 lg:p-10">
-
-                        { dataList && dataList.length > 0 ? (
-                            <div className="grid grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] gap-6 mt-8">
-                                {dataList.map((file, index) => (
-                                    <DataItemBox
-                                        key={index}
-                                        index={index}
-                                        file={file}
-                                        // folderPath={folderPath}
-                                        isMenuOpen={openMenuIndex === index}
-                                        onToggleMenu={() =>
-                                            setOpenMenuIndex(openMenuIndex === index ? null : index)
-                                        }
-                                        menuRef={(el) => (menuRefs.current[index] = el)}
-                                        localStorageName="documentDataFiles"
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            <Loader />
-                        )}
-                    </div> */}
+                  
                     <DataGrid dataList = {dataList} folderPath = {folderPath} />
                 </div>
 

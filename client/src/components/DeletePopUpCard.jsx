@@ -6,43 +6,27 @@ const DeleteCard = ({ file, folderPath, localStorageName }) => {
 
   const firebase = useFirebase();
   const popupContext = usePopUpContext();
-
-  console.log(folderPath);
   const handleConfirmDelete = async () => {
     await firebase.deleteFile(folderPath, file, localStorageName);
-    ///
-    const remainingFiles = await firebase.getDocument(folderPath);
-    console.log("remain is: ", remainingFiles);
+    // const remainingFiles = await firebase.getDocument(folderPath);
+    // console.log("remain is: ", remainingFiles);
 
     firebase.deleteDocIfFilesEmpty('shared_uploads', folderPath);
-
     popupContext.setShowDeleteCard(false);
     popupContext.setReloadData(true);
     
   };
 
-  // const handleDelete = async ()=>{
-  //     await firebase.deleteItem( folderPath, `${folderPath}${file.name}`, localStorageName);
-  //     onToggleMenu();
-  //     if (onDeleteToast) onDeleteToast(); // 👈 trigger toast
-  // }
-
-  
+  // useEffect(() => {
+  //   console.log("reload state is :",popupContext.reloadData)
+  // }, [popupContext.reloadData]);
 
 
+  // useEffect(() => {
+  //   console.log("file in delete card: ", file.name)
+  //   console.log(popupContext)
 
-  useEffect(() => {
-    console.log("reload state is :",popupContext.reloadData)
-
-   
-  }, [popupContext.reloadData]);
-
-
-  useEffect(() => {
-    console.log("file in delete card: ", file.name)
-    console.log(popupContext)
-
-  }, [file, popupContext.showDeleteCard])
+  // }, [file, popupContext.showDeleteCard])
 
   return (
 

@@ -31,7 +31,7 @@ const Home = () => {
 
   useEffect(() => {
     if (!storedUser) {
-      console.log("user is not logged in", firebase.isLoggedIn)
+      // console.log("user is not logged in", firebase.isLoggedIn)
       navigate('/signin')
       return
     }
@@ -39,7 +39,7 @@ const Home = () => {
   }, [firebase, navigate])
 
   useEffect(() => {
-    console.log(popupContext.reloadData)
+    // console.log(popupContext.reloadData)
     if (popupContext.reloadData) {
       loadFolders();
       popupContext.setReloadData(false);

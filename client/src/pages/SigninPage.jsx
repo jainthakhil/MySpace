@@ -47,7 +47,7 @@ const SignInPage = () => {
     firebase.signinUser(formData.email, formData.password);
   };
 
-  console.log(firebase.isLoggedIn);
+  // console.log(firebase.isLoggedIn);
 
   return (
     <StyledWrapper>

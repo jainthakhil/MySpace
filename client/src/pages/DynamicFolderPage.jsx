@@ -31,16 +31,6 @@ const DynamicFolderPage = () => {
     const loadFiles = async () => {
         const data = await firebase.getDocument(folderId);
         setDataList(data);
-
-        // const cached = sessionStorage.getItem('documentDataFiles');
-        // if (cached) {
-        //     setDataList(JSON.parse(cached));
-        // } else {
-        //     const data = await firebase.fetchFiles('documents/');
-        //     setDataList(data);
-        //     sessionStorage.setItem('documentDataFiles', JSON.stringify(data));
-        // }
-        // console.log("document data is ", dataList)
     };
 
      useEffect(() => {
@@ -63,10 +53,8 @@ const DynamicFolderPage = () => {
         if(popupContext.reloadData){
             loadFiles();
             popupContext.setReloadData(false);
-            // popupContext.setShowSuccessCard(false);
 
         }
-        // console.log(popupContext)
 
     }, [popupContext.reloadData])
 
@@ -90,8 +78,6 @@ const DynamicFolderPage = () => {
             <SidebarComp />
             <div className='w-full min-h-screen flex flex-col items-center justify-evenly text-black dark:text-white'>
             <Header/>
-            {/* <AccountDropdown/> */}
-                {/* <DropzoneUploader path={folderPath}  /> */}
                 <div className="w-full flex flex-col flex-1 items-center text-center bg-gray-100 dark:bg-darkBack">
 
                 <SubHeader folderName={folderId}/>
@@ -109,11 +95,6 @@ const DynamicFolderPage = () => {
                          />
                      </div>
                  )}
-                 {/* {popupContext.showSuccessCard && (
-                    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 transition duration-300 ease-in-out">
-                         <UploadingPopup />
-                     </div>
-                 )} */}
             </div>
         </div>
      );
